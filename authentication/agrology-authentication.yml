@@ -1,0 +1,135 @@
+generated: '2026-09-13'
+method: searched
+source: https://github.com/agrology/public-api-docs/blob/main/README.md
+docs: https://github.com/agrology/public-api-docs/blob/main/README.md#authentication-security
+spec: openapi/agrology-public-api-openapi.yml
+summary:
+  types:
+  - http
+  - apiKey
+  note: >-
+    The OpenAPI declares ONE scheme (http bearer JWT, named publicApiAuthorizer) and
+    applies it to all 90 operations. The provider README documents a SECOND, equally
+    valid credential — an x-api-key header — that the spec omits entirely. This
+    artifact records both because the docs are authoritative on the auth surface and
+    the spec is explicitly marked "under development" by the provider.
+schemes:
+- name: publicApiAuthorizer
+  type: http
+  scheme: bearer
+  bearerFormat: JWT
+  in: header
+  header: Authorization
+  format: 'Authorization: Bearer $ACCESS_TOKEN'
+  applied_to: all 90 operations
+  method: derived
+  sources:
+  - openapi/agrology-public-api-openapi.yml
+  issuance:
+    how: >-
+      Log in to the Grower's Portal at https://grower.agrology.ag/ and click the
+      username in the application footer to reveal the current access token.
+    self_service: true
+    lifetime: 1 hour
+    lifetime_seconds: 3600
+    renewal: >-
+      Tokens are not refreshable from the Public API. The user must return to the
+      Grower's Portal for a new token after expiry — there is no documented
+      client-credentials or refresh-token flow for machine clients.
+    identity_provider: Amazon Cognito user pool (see identity_provider below)
+- name: apiKey
+  type: apiKey
+  in: header
+  header: x-api-key
+  format: 'x-api-key: $API_KEY'
+  applied_to: >-
+    All operations per the README ("Clients must attach either a Bearer Token or an
+    API key to all API requests"). Not declared in the OpenAPI securitySchemes.
+  method: searched
+  sources:
+  - https://github.com/agrology/public-api-docs/blob/main/README.md
+  issuance:
+    how: Contact Agrology staff to receive an API Key.
+    self_service: false
+    rotation: >-
+      Not yet available. The README states "Soon, the Grower's Portal will alllow
+      users to rotate API Keys" (provider's spelling) — key rotation is a stated
+      roadmap item, not a shipped capability as of the 2026-07-01 docs commit.
+    lifetime: not documented
+identity_provider:
+  kind: oidc
+  vendor: Amazon Cognito
+  region: us-east-1
+  user_pool_id: us-east-1_qBmvSfyNK
+  discovery_document: https://cognito-idp.us-east-1.amazonaws.com/us-east-1_qBmvSfyNK/.well-known/openid-configuration
+  discovery_http_status: 200
+  method: probed
+  issuer: https://cognito-idp.us-east-1.amazonaws.com/us-east-1_qBmvSfyNK
+  jwks_uri: https://cognito-idp.us-east-1.amazonaws.com/us-east-1_qBmvSfyNK/.well-known/jwks.json
+  authorization_endpoint: https://auth.agrology.ag/oauth2/authorize
+  token_endpoint: https://auth.agrology.ag/oauth2/token
+  userinfo_endpoint: https://auth.agrology.ag/oauth2/userInfo
+  revocation_endpoint: https://auth.agrology.ag/oauth2/revoke
+  end_session_endpoint: https://auth.agrology.ag/logout
+  id_token_signing_alg_values_supported:
+  - RS256
+  response_types_supported:
+  - code
+  - token
+  token_endpoint_auth_methods_supported:
+  - client_secret_basic
+  - client_secret_post
+  note: >-
+    The Grower's Portal build shipped at https://grower.agrology.ag/ names this pool
+    and a public web client id in its bundle. The pool's OIDC discovery document is
+    anonymously readable and returns 200, and every interactive endpoint it advertises
+    is on auth.agrology.ag — a host Agrology controls — which is how the IdP was
+    confirmed to belong to this company rather than to a shared vendor tenant. The
+    Public API itself does NOT advertise an OIDC or OAuth discovery document on any
+    agrology.ag host; see well-known/agrology-well-known.yml.
+authorization:
+  model: >-
+    Access is entity-scoped, not scope-scoped. A caller's reach is an access-control
+    list of customers, sites and nodes, resolved at call time rather than encoded as
+    OAuth scopes in the token.
+  discovery_endpoint: GET /access
+  discovery_url: https://api.agrology.ag/v2/access
+  shape: >-
+    Returns siteAccess[] — one entry per customer the caller can reach, each carrying
+    displayName and a sites{} map keyed by site id, each site carrying a role
+    (e.g. "admin") and its nodes[].
+  roles_observed:
+  - admin
+  roles_note: >-
+    The README's example shows role "admin" on a site. The full role vocabulary is not
+    published; /access/manage/{customerID}/{accessUser}/{accessLevel} implies an
+    accessLevel vocabulary that the docs also do not enumerate.
+  delegated_administration:
+    list: GET /access/manage/{customerID}
+    grant: POST /access/manage/{customerID}/{accessUser}/{accessLevel}
+    revoke: DELETE /access/manage/{customerID}/{accessUser}
+observed_behavior:
+  method: probed
+  probes:
+  - url: https://api.agrology.ag/v2/access
+    request: no credential
+    status: 403
+    body: '{"message":"Forbidden"}'
+    amzn_error_type: MissingAuthenticationTokenException
+  - url: https://api.agrology.ag/v2/access
+    request: 'x-api-key: <invalid>'
+    status: 401
+    cors_allow_origin: '*'
+  note: >-
+    A missing credential returns 403 with an AWS API Gateway
+    MissingAuthenticationTokenException, while a present-but-invalid key returns 401.
+    This inverts the README, which says "Any API request without a Bearer Token or API
+    Key will be rejected with a 401 Unauthorized error" — an agent retrying on 401
+    alone will not recognise the unauthenticated case. The API responds with
+    Access-Control-Allow-Origin *, so browser clients may call it cross-origin.
+gaps:
+- The x-api-key scheme is documented but absent from the OpenAPI securitySchemes.
+- No refresh-token or client-credentials flow is documented; long-running machine
+  clients must use an API key obtained by contacting staff.
+- API key rotation is not yet self-service.
+- The documented 401-on-missing-credential does not match the observed 403.

@@ -1,0 +1,358 @@
+generated: '2026-09-13'
+method: searched
+source: https://github.com/agrology/public-api-docs/blob/main/README.md
+derived_from: openapi/agrology-public-api-openapi.yml
+api: Agrology Public API v2
+base_url: https://api.agrology.ag/v2
+
+authentication:
+  style: bearer JWT (Authorization header) OR static API key (x-api-key header)
+  detail: authentication/agrology-authentication.yml
+  note: >-
+    Either credential satisfies every operation. The bearer token is a 1-hour
+    Cognito-issued JWT collected by hand from the Grower's Portal footer; the API key
+    is issued by Agrology staff and is the only credential suitable for unattended
+    machine clients.
+
+versioning:
+  style: uri-path
+  current: v2
+  example: https://api.agrology.ag/v2/sites
+  spec_info_version: 1.0.0
+  note: >-
+    The major version is pinned in the base path. There is no Accept-header or
+    query-parameter version negotiation, and no version header is returned. The
+    response envelope carries its own independent version field
+    (request.responseVersion, observed value "2.1"), which is the only per-response
+    contract-version signal the API emits.
+  response_version_field: request.responseVersion
+
+idempotency:
+  coverage: none
+  mechanism: null
+  header: null
+  scope: []
+  retention: null
+  evidence: >-
+    No Idempotency-Key (or equivalent) header appears anywhere in the 71KB OpenAPI or
+    in the 18KB provider README. None of the 31 mutating operations declares an
+    idempotency parameter, and no replay-protection semantics are documented.
+  natural_idempotency:
+    note: >-
+      A subset of writes is naturally idempotent because the caller supplies the full
+      composite key in the path, so a replay overwrites rather than duplicates. This is
+      a property of the URL design, not a documented guarantee, and it does NOT cover
+      the collection-POST creates.
+    naturally_idempotent:
+    - PUT /experiments/{customerID}/{id}
+    - PUT /experiments/groups/{customerID}/{experimentID}/{id}
+    - PUT /experiments/members/{customerID}/{experimentID}/{groupID}/{nodeID}
+    - PUT /experiments/metrics/{customerID}/{experimentID}/{id}
+    - PUT /report-definitions/{customerID}/{id}
+    - PUT /library-charts/{customerID}/{id}
+    - PUT /dashboards/{owner}/{id}
+    - PUT /customer-inputs/{customerID}/{id}
+    - POST /experiments/members/{customerID}/{experimentID}/{groupID}/{nodeID}
+    - POST /access/manage/{customerID}/{accessUser}/{accessLevel}
+    not_protected:
+    - POST /experiments/customer/{customerID}
+    - POST /experiments/groups/{customerID}/{experimentID}
+    - POST /experiments/metrics/{customerID}/experiment-id/{experimentID}
+    - POST /report-definitions/customer/{customerID}
+    - POST /report-runs/customer/{customerID}
+    - POST /library-charts/customer/{customerID}
+    - POST /dashboards/owner/{owner}
+    - POST /customer-inputs/customer/{customerID}
+    - POST /feedback
+    - POST /experiments/data/{customerID}/e/{experimentID}/run
+    - POST /experiments/data/{customerID}/e/{experimentID}/regenerate
+  agent_impact: >-
+    An agent that retries a timed-out collection POST will create a duplicate
+    Experiment, ReportRun, LibraryChart, Dashboard, CustomerInput or feedback record
+    with a new server-assigned id, and has no documented way to detect or collapse it.
+
+reversibility:
+  grade: documented
+  read_only: false
+  write_operations: 31
+  read_operations: 59
+  reversible:
+  - resource: Dashboard
+    forward: DELETE /dashboards/{owner}/{id}
+    reversal: POST /dashboards/{owner}/{id}
+    reversal_summary: Undelete a specific Dashboard
+    reversal_operation_id: null
+    window: not stated
+    window_source: null
+    confidence: high
+    evidence: openapi/agrology-public-api-openapi.yml — the POST on the item path is
+      summarised "Undelete a specific Dashboard" and returns 204, so a delete is a soft
+      delete that the same caller can reverse.
+  - resource: User access grant
+    forward: DELETE /access/manage/{customerID}/{accessUser}
+    reversal: POST /access/manage/{customerID}/{accessUser}/{accessLevel}
+    reversal_summary: grants access to accessUser for customerID
+    window: n/a — re-grant, not undelete
+    confidence: medium
+    evidence: >-
+      Revoking and re-granting restores the same caller to the same customer, but this
+      is a fresh grant rather than a documented restore; the docs do not say whether any
+      per-user state survives the revoke.
+  not_reversible:
+    note: >-
+      These deletes have no documented undelete, restore, or trash/retention window.
+      Treat them as permanent.
+    operations:
+    - DELETE /experiments/{customerID}/{id}
+    - DELETE /experiments/groups/{customerID}/{experimentID}/{id}
+    - DELETE /experiments/members/{customerID}/{experimentID}/{groupID}/{nodeID}
+    - DELETE /experiments/metrics/{customerID}/{experimentID}/{id}
+    - DELETE /report-definitions/{customerID}/{id}
+    - DELETE /library-charts/{customerID}/{id}
+    - DELETE /customer-inputs/{customerID}/{id}
+  regeneration:
+    note: >-
+      Not a reversal, but the nearest thing for experiment time series: the computed
+      data behind an experiment can be recomputed from source telemetry.
+    operations:
+    - POST /experiments/data/{customerID}/e/{experimentID}/run
+    - POST /experiments/data/{customerID}/e/{experimentID}/regenerate
+  agent_impact: >-
+    Exactly one of seven delete surfaces can be taken back, and no retention window is
+    published for it. An agent should treat every DELETE except the Dashboard one as
+    irreversible and require confirmation.
+
+dry_run_mode:
+  supported: false
+  evidence: >-
+    No preview, validate, dry-run or simulate parameter appears in the spec or the
+    README. The closest published affordance is FeedbackSubmission.isTestMessage, which
+    flags a feedback record so the customer-success team ignores it — the write still
+    happens.
+
+pagination:
+  style: none
+  evidence: >-
+    No limit, offset, page, cursor, page_size, next or per_page parameter appears on any
+    of the 59 read operations, and no response envelope carries a next/cursor field.
+    Collection endpoints return the full result set.
+  volume_control: >-
+    Time-series volume is bounded by the {timeRange} path segment and the optional
+    deviceType / metrics query filters rather than by pagination. An agent asking for a
+    wide range gets one large body, so the range IS the page size.
+
+filtering:
+  documented: true
+  docs: https://github.com/agrology/public-api-docs/blob/main/README.md#data-filtering
+  parameters:
+  - name: deviceType
+    in: query
+    style: comma-separated list
+    values_from: GET /historical/ground-truth/device-types
+    values_field: id
+    examples:
+    - '?deviceType=vwc,gV1'
+    - '?deviceType=gV1,gV2'
+    - '?deviceType=co2'
+  - name: metrics
+    in: query
+    style: comma-separated list
+    values_from: GET /historical/ground-truth/metrics
+    values_field: id
+    examples:
+    - '?metrics=airTemp'
+    - '?metrics=airTemp,humidity'
+    - '?deviceType=co2&metrics=co2Concentration'
+  default: >-
+    With no filter, the response includes every device and metric applicable to the
+    given site, optional node/device, and time range.
+
+time_range:
+  documented: true
+  docs: https://github.com/agrology/public-api-docs/blob/main/README.md#time-ranges
+  position: path segment {timeRange}
+  syntax: '{startTime}-{endTime}'
+  end_time_optional: true
+  end_time_default: $now
+  separator_required_when_open_ended: true
+  formats:
+  - name: relative
+    pattern: <integer><unit>
+    units:
+    - s
+    - m
+    - h
+    - d
+    - w
+    examples:
+    - 6d
+    - 20m
+    - 3600s
+    - 36h
+    constraint: Complex relative times (e.g. 2h5m) are NOT supported.
+  - name: epoch-seconds
+    pattern: exactly 10 numeric digits
+    example: '1618203722'
+  - name: epoch-milliseconds
+    pattern: exactly 13 numeric digits
+    example: '1618203722000'
+  - name: human-minute
+    pattern: yyyyMMddhhmm — exactly 12 digits, must begin with '20'
+    example: '202108010000'
+    timezone: UTC
+  - name: human-second
+    pattern: yyyyMMddhhmmss — exactly 14 digits, must begin with '20'
+    example: '20210801052530'
+    timezone: UTC
+  mixed_formats_allowed: true
+  examples:
+  - range: 1618203722-1618290149
+    means: epoch start to epoch end
+  - range: 1618203722-
+    means: epoch start to now
+  - range: 4h-
+    means: four hours ago to now
+  - range: 6h-4h
+    means: a two-hour window from six to four hours ago
+  agent_note: >-
+    Digit count is load-bearing and disambiguates the format, so an agent must
+    zero-pad and must not trim. There is no ISO-8601 input form.
+
+ordering:
+  documented: true
+  grouping: by node
+  within_group: by timestamp, chronological ascending
+  guarantee: >-
+    Node ordering is explicitly NOT guaranteed and may differ between two identical
+    requests. Only the per-node sample order is stable.
+  agent_impact: An agent must key on node id, never on array position.
+
+response_envelope:
+  shape: object
+  fields:
+  - name: status
+    example: ok
+  - name: request
+    subfields:
+    - requestTime
+    - source
+    - siteId
+    - format
+    - responseVersion
+  - name: sites
+    shape: map keyed by site id
+  - name: devices
+    shape: map keyed by device id
+  - name: nodes
+    shape: map keyed by node UUID, each carrying samples[]
+  sample_shape:
+    ts: epoch seconds
+    dev: device id
+    d: object of metric id to value
+  applies_to:
+  - historical/ground-truth
+  - historical/weather
+  - synthetics/microclimate
+  - predictions/microclimate
+  - predictions/weather
+  note: >-
+    The metric object `d` is an open map — its keys are metric ids drawn from the
+    per-dataset /metrics endpoints, not a fixed schema. An agent must resolve metric
+    ids and units from the matching /metrics endpoint rather than hard-coding them.
+
+geojson:
+  documented: true
+  standard: GeoJSON (RFC 7946)
+  endpoints:
+  - GET /geojson/sites
+  - GET /geojson/customer/{customerID}
+  - GET /geojson/site/{siteID}
+  shape: >-
+    A FeatureCollection whose features carry properties.elementType of "site" or "node".
+    Non-standard sibling keys (key, description, historicalURL, predictionsURL,
+    syntheticsURL, sites[]) are added alongside the RFC 7946 members at the top level —
+    a strict GeoJSON parser will ignore them, which is the intended behaviour.
+  hateoas: >-
+    historicalURL, predictionsURL and syntheticsURL are TEMPLATED links
+    ({site}, {dataset}) returned inside the GeoJSON body — the only link-following
+    affordance in the API and the intended path from geometry to telemetry.
+
+error_envelope:
+  format: non-standard
+  rfc9457: false
+  shape: '{"message": "<text>"}'
+  evidence: >-
+    Observed on live unauthenticated probes of https://api.agrology.ag/v2/ — the AWS
+    API Gateway default envelope. No error schema is declared in the OpenAPI (every
+    operation declares only its 2xx response), and the README documents no error body.
+  detail: errors/agrology-problem-types.yml
+
+rate_limit_signaling:
+  headers: []
+  documented: false
+  detail: rate-limits/agrology-rate-limits.yml
+
+request_tracing:
+  client_supplied: none
+  server_returned:
+  - name: x-amzn-requestid
+    note: AWS API Gateway request id; present on every response including errors.
+  - name: x-amz-apigw-id
+  - name: x-amzn-trace-id
+    note: X-Ray trace header; observed on authenticated-shape responses.
+  documented: false
+  note: >-
+    These are infrastructure headers, not a documented correlation contract. They are
+    still the best identifier to quote in a support request.
+
+cors:
+  allow_origin: '*'
+  allow_headers: '*'
+  allow_methods: '*'
+  method: probed
+  source: live response headers from https://api.agrology.ag/v2/access
+
+field_expansion:
+  supported: false
+sparse_fieldsets:
+  supported: false
+  note: The metrics= query parameter is the nearest equivalent for time-series payloads.
+metadata_fields:
+  supported: false
+  note: >-
+    Experiment carries free-text notes/notice fields and CustomerInput is itself a
+    user-supplied annotation resource, but there is no generic per-object metadata map.
+
+file_access:
+  documented: true
+  docs: https://github.com/agrology/public-api-docs/blob/main/README.md#accessing-files-from-responses
+  pattern: >-
+    Some response bodies carry s3:// locations rather than fetchable URLs. To read one,
+    call the fileserver endpoint with the path in a urlencoded `file` query parameter and
+    exchange it for a short-lived pre-signed URL.
+  endpoints:
+  - GET /fileserver/customer/{customerID}?file=/path/to/file.txt
+  - GET /fileserver/site/{siteID}
+  - GET /fileserver/customer/{customerID}/shared
+  response_schema: PreSignedURLResponse
+  agent_note: >-
+    Two-step by design. The file query parameter must be properly urlencoded, and the
+    returned URL is temporary — it must be followed immediately and not cached.
+
+identifiers:
+  note: >-
+    Identifier shape is NOT uniform and the docs say so explicitly: older Customers and
+    Sites use slug-style ids (e.g. "agrology", "austin-research-station") while newer
+    ones use UUIDs. All Nodes are UUIDs. Device ids are neither — they are hardware
+    identifiers (e.g. "70B3D57BA000163E", "383737326F308105").
+  agent_impact: >-
+    An agent must not validate customerID or siteID as a UUID, and must not infer entity
+    type from identifier shape.
+
+cross_references:
+  errors: errors/agrology-problem-types.yml
+  lifecycle: lifecycle/agrology-lifecycle.yml
+  authentication: authentication/agrology-authentication.yml
+  scopes: scopes/agrology-scopes.yml
+  rate_limits: rate-limits/agrology-rate-limits.yml
+  data_model: data-model/agrology-data-model.yml

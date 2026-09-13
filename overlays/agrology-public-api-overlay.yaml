@@ -1,0 +1,300 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the Agrology Public API v2
+  version: 1.0.0
+extends: openapi/agrology-public-api-openapi.yml
+x-generated: '2026-09-13'
+x-method: generated
+x-source: >-
+  Generated from the provider's own published documentation
+  (https://github.com/agrology/public-api-docs/blob/main/README.md) and from live probes
+  of https://api.agrology.ag/v2. Every action below adds description, example or
+  contact/licence metadata that Agrology states in prose but omits from its machine-readable
+  contract. NOTHING here changes a path, a parameter, a schema type or a security
+  requirement, and the original spec in openapi/ is never mutated.
+actions:
+
+- target: $.info
+  description: >-
+    Add the contact, licence, terms and description metadata the contract omits. All four
+    values are published by Agrology — contact from the GitHub organization's public
+    email, licence from the LICENSE file alongside the spec in the same repository.
+  update:
+    description: |
+      The Agrology Public API v2 exposes site and node configuration, field geometry as
+      GeoJSON, historical ground-truth sensor telemetry, historical and forecast weather
+      service data, ML-synthesized microclimate metrics, microclimate predictions,
+      threshold alerts, report definitions and runs, library charts, dashboards, customer
+      inputs and field experiments.
+
+      Authentication: attach either `Authorization: Bearer $ACCESS_TOKEN` (a Cognito JWT
+      collected from the Grower's Portal footer, valid one hour) or `x-api-key: $API_KEY`
+      (issued by Agrology staff). Either satisfies every operation.
+
+      Start with `GET /access`. Authorization is an entity access list rather than OAuth
+      scopes: that response names every customer, site and node the credential may reach,
+      and every other path is addressed with ids drawn from it.
+
+      Note the provider's own caveat: this specification is under development, may include
+      undocumented endpoints, and its response schemas currently lack data typing.
+    contact:
+      name: Agrology Support
+      email: support@agrology.ag
+      url: https://agrology.ag/contact
+    license:
+      name: Apache-2.0
+      url: https://github.com/agrology/public-api-docs/blob/main/LICENSE
+    termsOfService: https://agrology.ag/terms
+
+- target: $.externalDocs
+  description: Point at the provider's own README, which carries the time-range grammar,
+    the filtering rules and every response example the spec lacks.
+  update:
+    description: Agrology Public API documentation
+    url: https://github.com/agrology/public-api-docs/blob/main/README.md
+
+- target: $.servers[0]
+  description: Name the single production server.
+  update:
+    description: Production
+
+- target: $.components.securitySchemes.publicApiAuthorizer
+  description: >-
+    Document how the bearer token is obtained and that it expires after one hour — stated
+    in the README, absent from the scheme.
+  update:
+    description: |
+      Bearer token authentication. Obtain a token by logging in to the Grower's Portal at
+      https://grower.agrology.ag/ and clicking your username in the application footer.
+
+      Tokens expire ONE HOUR after issue and there is no refresh flow — you must return to
+      the portal for a new one. For unattended machine clients use the x-api-key scheme
+      instead.
+
+      Tokens are RS256 JWTs issued by the Amazon Cognito user pool us-east-1_qBmvSfyNK,
+      whose OIDC discovery document is published at
+      https://cognito-idp.us-east-1.amazonaws.com/us-east-1_qBmvSfyNK/.well-known/openid-configuration
+
+- target: $.components.securitySchemes
+  description: >-
+    Add the x-api-key scheme. The README states that clients must attach "either a Bearer
+    Token or an API key" to ALL requests, but the contract declares only the bearer
+    scheme, so a generated client has no way to send the credential most integrations
+    actually use.
+  update:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: |
+        Static API key authentication. Contact Agrology staff to be issued a key. Self-service
+        key rotation from the Grower's Portal is stated by the provider as a roadmap item and
+        is not yet available.
+
+        This is the credential to use for unattended machine clients, because it does not
+        expire after an hour the way a bearer token does.
+
+        Documented at
+        https://github.com/agrology/public-api-docs/blob/main/README.md#api-key
+
+- target: $.paths['/access'].get
+  description: Describe the access-list endpoint and give it the operationId the spec omits.
+  update:
+    operationId: getAccessList
+    summary: List the customers, sites and nodes this credential can reach
+    description: |
+      Returns the caller's access-control list: `siteAccess[]`, one entry per customer,
+      each carrying a `displayName` and a `sites` map keyed by site id, each site carrying
+      the caller's `role` and its `nodes[]`.
+
+      CALL THIS FIRST. Authorization in this API is entity-scoped, not scope-scoped —
+      there is no way to know which customers, sites or nodes a credential may address
+      without this response.
+
+      Identifier shapes are not uniform: older customers and sites use slug-style ids
+      while newer ones use UUIDs, and all nodes are UUIDs. Do not validate these as UUIDs.
+
+- target: $.paths['/geojson/site/{siteID}'].get
+  description: Document the GeoJSON contract and its templated telemetry links.
+  update:
+    operationId: getSiteGeoJSON
+    summary: Get site and node geometry as a GeoJSON FeatureCollection
+    description: |
+      Returns an RFC 7946 FeatureCollection. Features carry `properties.elementType` of
+      `site` or `node`; node features carry Point geometry in longitude, latitude order
+      (WGS 84 decimal degrees) along with elevation, crops and the attached device
+      inventory.
+
+      The response also carries foreign members alongside the standard GeoJSON ones:
+      `historicalURL`, `predictionsURL` and `syntheticsURL` are TEMPLATED links ({site},
+      {dataset}) and are this API's only link-following affordance — they take a consumer
+      from mapped geometry directly to the matching telemetry endpoints.
+
+      Note the provider's field spelling `siteClassificaiton` (observed value "lab");
+      match it as written.
+
+- target: $.paths['/historical/ground-truth/{siteID}/{timeRange}'].get
+  description: >-
+    Document the time-range grammar, the filter parameters and the response envelope. The
+    spec types this response as a bare string; the README describes the real shape.
+  update:
+    operationId: getGroundTruthHistory
+    summary: Retrieve measured in-field sensor telemetry for a site over a time range
+    description: |
+      Returns measured ground-truth telemetry captured by Agrology's own in-field sensors.
+
+      TIME RANGE ({timeRange} path segment) is `{startTime}-{endTime}`. The end time may be
+      omitted, defaulting to now, BUT THE HYPHEN IS STILL REQUIRED. Start and end may use
+      different formats:
+
+        - relative: `<integer><unit>`, unit one of s, m, h, d, w — `6d`, `20m`, `36h`.
+          Compound forms such as `2h5m` are NOT supported.
+        - epoch seconds: exactly 10 digits — `1618203722`
+        - epoch milliseconds: exactly 13 digits — `1618203722000`
+        - `yyyyMMddhhmm`: exactly 12 digits, beginning `20`, UTC — `202108010000`
+        - `yyyyMMddhhmmss`: exactly 14 digits, beginning `20`, UTC — `20210801052530`
+
+      Digit count is how the format is disambiguated: zero-pad and never trim. ISO-8601 is
+      not accepted as input.
+
+      FILTERING: optional `deviceType` and `metrics` query parameters each take a
+      comma-separated list. Values must match `id`s from
+      `GET /historical/ground-truth/device-types` and
+      `GET /historical/ground-truth/metrics`. With no filter, every applicable device and
+      metric is returned.
+
+      RESPONSE: samples are grouped by node under `nodes{}` and ordered chronologically
+      within each node. Node ordering is explicitly NOT guaranteed between requests — key
+      on node id, never on array position. Each sample's `d` object is an open map of
+      metric id to value whose keys vary by device type, so resolve ids and units from the
+      metrics endpoint rather than hard-coding them.
+
+- target: $.paths['/historical/ground-truth/{siteID}/{timeRange}'].get.parameters
+  description: >-
+    Add the two documented filter parameters. The README defines them precisely; the
+    contract omits them entirely, so no generated client can filter.
+  update:
+  - name: deviceType
+    in: query
+    required: false
+    description: >-
+      Comma-separated list of device types to include. Values must match `id` values from
+      GET /historical/ground-truth/device-types. Example: `vwc,gV1`.
+    schema:
+      type: string
+    example: vwc,gV1
+  - name: metrics
+    in: query
+    required: false
+    description: >-
+      Comma-separated list of metric names to include. Values must match `id` values from
+      GET /historical/ground-truth/metrics. Example: `airTemp,humidity`.
+    schema:
+      type: string
+    example: airTemp,humidity
+
+- target: $.paths['/predictions/microclimate/{siteID}'].get
+  description: Record the forecast horizon and the omitted-time-range behaviour.
+  update:
+    operationId: getMicroclimateForecast
+    summary: Retrieve Agrology microclimate predictions for a site
+    description: |
+      Microclimate predictions are generated by Agrology using a statistical model with
+      inputs from weather-service forecasts and Agrology historical ground-truth data for
+      that microclimate.
+
+      Predictions are available up to FOUR DAYS ahead. With the time range omitted (this
+      operation), the start is assumed to be now and all future predictions are returned.
+
+      Response uses the standard time-series envelope.
+
+- target: $.paths['/alerts/customer/{customerID}'].get
+  description: Document the alert envelope, including its push-notification block and its
+    inconsistent timestamp format.
+  update:
+    operationId: listCustomerAlerts
+    summary: List threshold alerts for a customer
+    description: |
+      Returns alerts raised when configured thresholds are met — for example a forecast
+      extreme-cold or extreme-heat warning. Alerts are aggregated per customer and may
+      span multiple sites.
+
+      The envelope carries an `aps` block (an Apple Push Notification payload) alongside
+      `alerts[]`, because this endpoint doubles as the mobile push feed.
+
+      NOTE a real inconsistency: alert `startTime` and `updateTime` are ISO-8601 strings
+      ("2023-03-07T13:01:41Z"), whereas every other timestamp in this API — including
+      sample `ts` and every {timeRange} input — is an epoch integer.
+
+      There is no webhook or event-stream equivalent; alerts must be polled.
+
+- target: $.paths['/fileserver/customer/{customerID}'].get
+  description: Document the two-step pre-signed download flow.
+  update:
+    operationId: getCustomerFileDownloadURL
+    summary: Exchange an s3:// file location for a pre-signed download URL
+    description: |
+      Some response bodies carry internet file locations such as
+      `s3://bucket-name.domain.com/path/to/file.txt` rather than fetchable URLs. To read
+      one, call this endpoint with the file location path in the `file` query parameter —
+      PROPERLY URLENCODED — and it returns a temporary pre-signed URL.
+
+      Example: `/fileserver/customer/{customerID}?file=/path/to/file.txt`
+
+      The returned URL is short-lived. Follow it immediately; do not cache or persist it.
+      Re-call this endpoint to mint a new one.
+
+- target: $.paths['/dashboards/{owner}/{id}'].post
+  description: >-
+    Make the reversibility of dashboard deletion explicit. This is the ONLY reversible
+    delete in the entire API and the contract states it only in a four-word summary.
+  update:
+    operationId: undeleteDashboard
+    summary: Undelete a specific Dashboard
+    description: |
+      Restores a dashboard previously removed with DELETE /dashboards/{owner}/{id}.
+
+      This is the only documented reversal path in the Agrology Public API. Deletes of
+      experiments, experiment groups, experiment members, experiment metrics, report
+      definitions, library charts and customer inputs have NO undelete and should be
+      treated as permanent.
+
+      Agrology does not publish a retention window for this restore, so the period during
+      which it will succeed is unknown.
+
+- target: $.paths['/feedback'].post
+  description: Give the feedback endpoint an operationId and note its test flag.
+  update:
+    operationId: submitFeedback
+    description: |
+      Submit a feature request, bug report or other feedback about the Agrology platform.
+
+      Set `isTestMessage: true` for any submission that is not genuine so the
+      customer-success team can ignore it. Set `wantsFollowUp: true` to ask to be
+      contacted.
+
+      This write is not idempotent and has no reversal — a retry files a second record.
+
+- target: $.paths['/experiments/data/{customerID}/e/{experimentID}/regenerate'].post
+  description: Warn that regeneration is destructive to computed data.
+  update:
+    operationId: regenerateExperimentData
+    description: |
+      Requests that the experiment's computed time-series data be fully regenerated from
+      source telemetry. The existing computed series is discarded and rebuilt.
+
+      Returns 204. This is not a reversal — there is no way to restore the previous
+      computation. Prefer POST .../run for an incremental re-run.
+
+- target: $.paths['/access/manage/{customerID}/{accessUser}/{accessLevel}'].post
+  description: Flag the consequence of granting access.
+  update:
+    operationId: grantCustomerAccess
+    description: |
+      Grants {accessUser} access to {customerID} at {accessLevel}.
+
+      HIGH CONSEQUENCE: this changes who can read a grower's agronomic data. The
+      accessLevel vocabulary is not published; the only value appearing in Agrology's own
+      documentation is `admin`.
+
+      Reversed with DELETE /access/manage/{customerID}/{accessUser}.

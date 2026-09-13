@@ -1,0 +1,298 @@
+generated: '2026-09-13'
+method: derived
+source: openapi/agrology-public-api-openapi.yml
+status: candidate
+api: Agrology Public API v2
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: unknown
+  verified: probed
+  note: >-
+    NO PUBLIC MCP SERVER. Agrology ships no hosted MCP endpoint an agent can reach and no
+    installable stdio package. The tools[] below are a CANDIDATE list derived from the
+    published OpenAPI by this pipeline — they are a proposal, not something Agrology
+    operates. No MCPServer pointer is emitted in apis.yml for this file.
+internal_server_observed:
+  note: >-
+    Recorded as evidence, deliberately NOT promoted into deployment.endpoint. Agrology
+    does appear to run an MCP server, but it is an internal one and it is not an agent
+    surface any third party can use.
+  configured_base_url: https://mcp.internal.agrology.ag
+  where_found: >-
+    The production Grower's Portal build at https://grower.agrology.ag/ carries a config
+    object naming mcpBaseUrl "https://mcp.internal.agrology.ag" alongside apiBaseUrl
+    "https://api.agrology.ag/v2" and prodHostname "grower.agrology.ag". The value is the
+    provider's own, read verbatim from the shipped bundle; it was not guessed.
+  hostname_signal: >-
+    The ".internal." label is the provider's own statement of intent — this endpoint is
+    not meant for public consumption.
+  probes:
+  - url: https://mcp.internal.agrology.ag/
+    method: POST
+    body: '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+    status: 403
+    response: '{"error":"CSRF check failed"}'
+  - url: https://mcp.internal.agrology.ag/mcp
+    method: POST
+    status: 404
+    response: Next.js HTML 404 page
+  - url: https://mcp.internal.agrology.ag/sse
+    method: POST
+    status: 404
+    response: Next.js HTML 404 page
+  conclusion: >-
+    The host answers as a Next.js web application, not as a JSON-RPC MCP transport. No
+    tools/list response, no OAuth challenge, no MCP session header. Either the MCP
+    transport sits behind an authenticated route, or the name is aspirational. Either
+    way there is no anonymously verifiable MCP surface, so no tool inputSchema could be
+    introspected and none is claimed here.
+related_ai_surface:
+  name: Agrology AI
+  url: https://chat.agrology.ag
+  status: 200
+  description: Agricultural data analysis powered by AI
+  kind: first-party conversational web application (Next.js)
+  marketing_page: https://agrology.ag/agrology-chat
+  embedded_in: >-
+    The Grower's Portal bundle carries agrology-ai-chat container classes, so the same
+    assistant is embedded in the portal as a chat panel.
+  note: >-
+    Agrology ships an AI assistant over its own agronomic data, but exposes it only as a
+    human chat UI. There is no MCP, no API and no agent-callable surface for it.
+oauth_discovery:
+  probed: true
+  well_known_oauth_authorization_server: not served on any agrology.ag host (see
+    well-known/agrology-well-known.yml)
+  well_known_oauth_protected_resource: not served on any agrology.ag host
+  note: >-
+    The company's OAuth authorization server (auth.agrology.ag) returns 404 for both
+    documents; only the AWS-hosted Cognito issuer serves OIDC discovery.
+candidate_tools:
+  note: >-
+    Derived by grouping the 90 published OpenAPI operations into agent-sized tools. Every
+    rest[] entry is a verbatim METHOD + path from the spec. The spec assigns
+    operationIds to only 5 of its 90 operations, so most bindings can only be expressed
+    as method+path — that is the provider's gap, not an omission here.
+  tool_count: 15
+  coverage: 90 of 90 operations
+  auth_model: >-
+    Any real server would pass through the caller's bearer JWT or x-api-key; every
+    operation is credentialed and entity-scoped, so a tool must never hold a shared key.
+tools:
+- name: list_my_access
+  description: List every customer, site and node the current credential can reach, with
+    the caller's role per site. The mandatory first call — nothing else can be addressed
+    without ids from here.
+  category: discovery
+  read_only: true
+  rest:
+  - GET /access
+- name: list_sites_and_nodes
+  description: List the sites and sensor nodes available to the caller.
+  category: topology
+  read_only: true
+  rest:
+  - GET /sites
+  - GET /nodes
+- name: get_field_geometry
+  description: Fetch field and sensor-node geometry as a GeoJSON FeatureCollection, for
+    a single site, a whole customer, or everything the caller can see. Also returns
+    templated links to the matching telemetry endpoints.
+  category: geospatial
+  read_only: true
+  rest:
+  - GET /geojson/sites
+  - GET /geojson/site/{siteID}
+  - GET /geojson/customer/{customerID}
+- name: list_metrics
+  description: Resolve the metric vocabulary for a dataset — metric ids, display names
+    and units. Must be called before filtering by metric, because metric ids are data,
+    not a fixed schema.
+  category: vocabulary
+  read_only: true
+  rest:
+  - GET /metrics
+  - GET /historical/ground-truth/metrics
+  - GET /historical/ground-truth/device-types
+  - GET /historical/weather/metrics
+  - GET /predictions/microclimate/metrics
+  - GET /predictions/weather/metrics
+  - GET /synthetics/microclimate/metrics
+- name: get_ground_truth_history
+  description: Retrieve measured in-field sensor telemetry for a site, node or device
+    over a time range, optionally filtered by device type and metric.
+  category: telemetry
+  read_only: true
+  rest:
+  - GET /historical/ground-truth/{siteID}/{timeRange}
+  - GET /historical/ground-truth/{siteID}/node/{nodeID}/{timeRange}
+  - GET /historical/ground-truth/{siteID}/device/{deviceID}/{timeRange}
+  - GET /historical/ground-truth/{siteID}/devices
+- name: get_weather_history
+  description: Retrieve historical weather-service data (sourced from Tomorrow.io) for a
+    site or node over a time range.
+  category: telemetry
+  read_only: true
+  rest:
+  - GET /historical/weather/{siteID}/{timeRange}
+  - GET /historical/weather/{siteID}/node/{nodeID}/{timeRange}
+- name: get_microclimate_forecast
+  description: Retrieve Agrology microclimate predictions — up to four days ahead — for a
+    site or node. Omitting the time range returns all future predictions from now.
+  category: predictions
+  read_only: true
+  rest:
+  - GET /predictions/microclimate/{siteID}
+  - GET /predictions/microclimate/{siteID}/{timeRange}
+  - GET /predictions/microclimate/{siteID}/node/{nodeID}
+  - GET /predictions/microclimate/{siteID}/node/{nodeID}/{timeRange}
+- name: get_weather_forecast
+  description: Retrieve weather-service forecasts (Tomorrow.io) for a site or node, up to
+    four days ahead.
+  category: predictions
+  read_only: true
+  rest:
+  - GET /predictions/weather/{siteID}
+  - GET /predictions/weather/{siteID}/{timeRange}
+  - GET /predictions/weather/{siteID}/node/{nodeID}
+  - GET /predictions/weather/{siteID}/node/{nodeID}/{timeRange}
+- name: get_synthetic_microclimate
+  description: Retrieve ML-synthesized historical microclimate metrics (for example
+    volumetric water content) derived from measured ground truth.
+  category: telemetry
+  read_only: true
+  rest:
+  - GET /synthetics/microclimate/{siteID}/{timeRange}
+  - GET /synthetics/microclimate/{siteID}/node/{nodeID}/{timeRange}
+  - GET /summaries/microclimate/customer/{customerID}
+- name: list_alerts
+  description: List threshold alerts raised for a customer — frost, extreme heat and
+    other configured insights — with affected sites and geographic points.
+  category: alerts
+  read_only: true
+  rest:
+  - GET /alerts/customer/{customerID}
+- name: get_file_download_url
+  description: Exchange an s3:// file location returned in another response for a
+    short-lived pre-signed download URL.
+  category: files
+  read_only: true
+  rest:
+  - GET /fileserver/customer/{customerID}
+  - GET /fileserver/customer/{customerID}/shared
+  - GET /fileserver/site/{siteID}
+- name: manage_reports
+  description: List, create, update and delete report definitions, and list, inspect and
+    trigger report runs.
+  category: reporting
+  read_only: false
+  destructive: true
+  rest:
+  - GET /report-definitions/customer/{customerID}
+  - POST /report-definitions/customer/{customerID}
+  - PUT /report-definitions/{customerID}/{id}
+  - DELETE /report-definitions/{customerID}/{id}
+  - GET /report-runs/customer/{customerID}
+  - GET /report-runs/{customerID}/{id}
+  - POST /report-runs/customer/{customerID}
+  - GET /report-runs/report-definition-id/{customerID}/{reportDefinitionID}
+  warning: >-
+    DELETE on a report definition has no undelete. POST on report-runs is not idempotent
+    — a retry creates a second run.
+- name: manage_experiments
+  description: Manage field experiments — the experiment, its groups, the nodes assigned
+    to each group, the metrics tracked, and the computed time series.
+  category: experiments
+  read_only: false
+  destructive: true
+  rest:
+  - GET /experiments/customer/{customerID}
+  - GET /experiments/{customerID}/{id}
+  - POST /experiments/customer/{customerID}
+  - PUT /experiments/{customerID}/{id}
+  - DELETE /experiments/{customerID}/{id}
+  - GET /experiments/groups/{customerID}/{experimentID}
+  - GET /experiments/groups/{customerID}/{experimentID}/{id}
+  - POST /experiments/groups/{customerID}/{experimentID}
+  - PUT /experiments/groups/{customerID}/{experimentID}/{id}
+  - DELETE /experiments/groups/{customerID}/{experimentID}/{id}
+  - GET /experiments/members/{customerID}/{experimentID}/{groupID}/{nodeID}
+  - GET /experiments/members/{customerID}/group-id/{groupID}
+  - GET /experiments/members/{customerID}/node-id/{nodeID}
+  - GET /experiments/members/{customerID}/experiment-id/{experimentID}
+  - POST /experiments/members/{customerID}/{experimentID}/{groupID}/{nodeID}
+  - PUT /experiments/members/{customerID}/{experimentID}/{groupID}/{nodeID}
+  - DELETE /experiments/members/{customerID}/{experimentID}/{groupID}/{nodeID}
+  - GET /experiments/metrics/{customerID}/{experimentID}/{id}
+  - GET /experiments/metrics/{customerID}/experiment-id/{experimentID}
+  - POST /experiments/metrics/{customerID}/experiment-id/{experimentID}
+  - PUT /experiments/metrics/{customerID}/{experimentID}/{id}
+  - DELETE /experiments/metrics/{customerID}/{experimentID}/{id}
+  - GET /experiments/data/{customerID}/e/{experimentID}/{resolution}/{timeRange}
+  - GET /experiments/data/{customerID}/e/{experimentID}/g/{groupID}/{resolution}/{timeRange}
+  - POST /experiments/data/{customerID}/e/{experimentID}/run
+  - POST /experiments/data/{customerID}/e/{experimentID}/regenerate
+  warning: >-
+    None of the experiment deletes is reversible. The regenerate call discards and
+    rebuilds computed data.
+- name: manage_workspace
+  description: Manage dashboards, library charts, customer inputs and user access grants
+    for a customer.
+  category: workspace
+  read_only: false
+  destructive: true
+  rest:
+  - GET /dashboards/owner/{owner}
+  - GET /dashboards/owner/{owner}/feature-id/{featureID}
+  - GET /dashboards/{owner}/{id}
+  - POST /dashboards/owner/{owner}
+  - PUT /dashboards/{owner}/{id}
+  - DELETE /dashboards/{owner}/{id}
+  - POST /dashboards/{owner}/{id}
+  - GET /library-charts/customer/{customerID}
+  - GET /library-charts/{customerID}/{id}
+  - POST /library-charts/customer/{customerID}
+  - PUT /library-charts/{customerID}/{id}
+  - DELETE /library-charts/{customerID}/{id}
+  - GET /customer-inputs/customer/{customerID}
+  - GET /customer-inputs/customer/{customerID}/category/{category}
+  - GET /customer-inputs/categories
+  - POST /customer-inputs/customer/{customerID}
+  - PUT /customer-inputs/{customerID}/{id}
+  - DELETE /customer-inputs/{customerID}/{id}
+  - GET /access/manage/{customerID}
+  - POST /access/manage/{customerID}/{accessUser}/{accessLevel}
+  - DELETE /access/manage/{customerID}/{accessUser}
+  operation_ids_available:
+  - showLibraryChart
+  - updateLibraryChart
+  - deleteLibraryChart
+  - listLibraryChartsByCustomerID
+  - createLibraryChart
+  warning: >-
+    Dashboard delete IS reversible — POST to the same item path undeletes it. Library
+    chart, customer input and access-grant deletes are NOT. Granting access changes who
+    can see a customer's agronomic data; treat POST /access/manage as high consequence.
+- name: submit_feedback
+  description: File feature requests, bug reports or other feedback about the Agrology
+    platform, optionally requesting follow-up.
+  category: support
+  read_only: false
+  rest:
+  - POST /feedback
+  note: >-
+    The only fully-described request schema in the spec. Set isTestMessage true for any
+    non-genuine submission so the customer-success team can ignore it.
+agent_readiness_notes:
+- No public MCP server, so nothing here is agent-callable today.
+- Credentials are not machine-friendly — the self-service bearer token is a 1-hour JWT
+  copied by hand from a web UI, and the durable API key requires contacting staff.
+- No error responses are declared anywhere in the spec, so a tool wrapper has no typed
+  failure path.
+- No idempotency on any of the 31 writes; retries on collection POSTs duplicate.
+- Historical values are restated when models are retrained
+  (lifecycle/agrology-lifecycle.yml), so an agent must not treat past telemetry as
+  immutable.

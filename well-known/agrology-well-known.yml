@@ -1,0 +1,327 @@
+generated: '2026-09-13'
+method: probed
+source: live probes of every Agrology host, 2026-09-13
+summary:
+  hosts_probed: 7
+  paths_probed_per_host: 9
+  documents_found: 0
+  finding: >-
+    NOT ONE well-known document is served on any Agrology host. No pointer of type
+    WellKnown, APICatalog, SecurityTxt or AgentCard is emitted from this file, because
+    every probe either 404'd, returned 403 from an authenticated gateway, or returned a
+    single-page-app HTML shell under a 200. A 200 carrying an SPA shell is NOT a
+    document and is recorded here as a miss.
+  spa_catch_all_warning: >-
+    agrology.ag, www.agrology.ag and grower.agrology.ag are client-rendered Vite/React
+    applications whose servers answer HTTP 200 with the same index shell for EVERY
+    unmatched path. The identical shell is returned for /robots.txt, /llms.txt,
+    /sitemap.xml and a deliberately bogus control path
+    (/zzz-not-a-real-path-12345, 200, 454 bytes, byte-identical). Status code alone is
+    worthless on these hosts; every result below was classified by reading the body.
+hosts:
+- host: agrology.ag
+  kind: marketing site (Vite/React SPA)
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    file: null
+    result: spa-shell
+  - path: /.well-known/openid-configuration
+    status: 200
+    file: null
+    result: spa-shell
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    file: null
+    result: spa-shell
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    file: null
+    result: spa-shell
+  - path: /.well-known/api-catalog
+    status: 200
+    file: null
+    result: spa-shell
+  - path: /.well-known/ai-plugin.json
+    status: 200
+    file: null
+    result: spa-shell
+  - path: /.well-known/agent-card.json
+    status: 200
+    file: null
+    result: spa-shell
+  - path: /.well-known/agent.json
+    status: 200
+    file: null
+    result: spa-shell
+  - path: /.well-known/aauth-resource.json
+    status: 200
+    file: null
+    result: spa-shell
+- host: www.agrology.ag
+  kind: marketing site (redirects to apex)
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    file: null
+    result: spa-shell
+  - path: /.well-known/openid-configuration
+    status: 200
+    file: null
+    result: spa-shell
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    file: null
+    result: spa-shell
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    file: null
+    result: spa-shell
+  - path: /.well-known/api-catalog
+    status: 200
+    file: null
+    result: spa-shell
+  - path: /.well-known/ai-plugin.json
+    status: 200
+    file: null
+    result: spa-shell
+  - path: /.well-known/agent-card.json
+    status: 200
+    file: null
+    result: spa-shell
+  - path: /.well-known/agent.json
+    status: 200
+    file: null
+    result: spa-shell
+  - path: /.well-known/aauth-resource.json
+    status: 200
+    file: null
+    result: spa-shell
+- host: api.agrology.ag
+  kind: production API host (Amazon API Gateway)
+  note: >-
+    Every path on this host, well-known or not, returns 403 {"message":"Forbidden"} with
+    x-amzn-errortype MissingAuthenticationTokenException. The gateway has no anonymous
+    route, so it cannot serve a discovery document even in principle.
+  documents:
+  - path: /.well-known/security.txt
+    status: 403
+    file: null
+    result: gateway-forbidden
+  - path: /.well-known/openid-configuration
+    status: 403
+    file: null
+    result: gateway-forbidden
+  - path: /.well-known/oauth-authorization-server
+    status: 403
+    file: null
+    result: gateway-forbidden
+  - path: /.well-known/oauth-protected-resource
+    status: 403
+    file: null
+    result: gateway-forbidden
+  - path: /.well-known/api-catalog
+    status: 403
+    file: null
+    result: gateway-forbidden
+  - path: /.well-known/ai-plugin.json
+    status: 403
+    file: null
+    result: gateway-forbidden
+  - path: /.well-known/agent-card.json
+    status: 403
+    file: null
+    result: gateway-forbidden
+  - path: /.well-known/agent.json
+    status: 403
+    file: null
+    result: gateway-forbidden
+  - path: /.well-known/aauth-resource.json
+    status: 403
+    file: null
+    result: gateway-forbidden
+- host: grower.agrology.ag
+  kind: Grower's Portal (Vite/React SPA on CloudFront)
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    file: null
+    result: spa-shell
+  - path: /.well-known/openid-configuration
+    status: 200
+    file: null
+    result: spa-shell
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    file: null
+    result: spa-shell
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    file: null
+    result: spa-shell
+  - path: /.well-known/api-catalog
+    status: 200
+    file: null
+    result: spa-shell
+  - path: /.well-known/ai-plugin.json
+    status: 200
+    file: null
+    result: spa-shell
+  - path: /.well-known/agent-card.json
+    status: 200
+    file: null
+    result: spa-shell
+  - path: /.well-known/agent.json
+    status: 200
+    file: null
+    result: spa-shell
+  - path: /.well-known/aauth-resource.json
+    status: 200
+    file: null
+    result: spa-shell
+- host: auth.agrology.ag
+  kind: Cognito hosted UI custom domain — the OAuth 2.0 authorization server
+  note: >-
+    Probed because the Cognito user pool's discovery document names this host in its
+    authorization_endpoint, token_endpoint, userinfo_endpoint, revocation_endpoint and
+    end_session_endpoint. It is a REAL authorization server and it answers with its own
+    JSON error rather than an SPA shell — but it serves no discovery metadata of its own.
+    The issuer's discovery document lives only on
+    cognito-idp.us-east-1.amazonaws.com, which is AWS's domain and not Agrology's, so it
+    earns no WellKnown credit here.
+  documents:
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+    result: not-found
+    body: '{"error":"This URL doesn''t exist on the authorization server."}'
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    file: null
+    result: not-found
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+    file: null
+    result: not-found
+  - path: /.well-known/jwks.json
+    status: 404
+    file: null
+    result: not-found
+  - path: /.well-known/security.txt
+    status: 404
+    file: null
+    result: not-found
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+    result: not-found
+- host: chat.agrology.ag
+  kind: Agrology AI — "Agricultural data analysis powered by AI" (Next.js)
+  note: >-
+    The only Agrology web host that returns honest 404s for missing paths, which makes
+    these the most reliable negatives in this file.
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    file: null
+    result: not-found
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+    result: not-found
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    file: null
+    result: not-found
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+    file: null
+    result: not-found
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+    result: not-found
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    file: null
+    result: not-found
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+    result: not-found
+  - path: /.well-known/agent.json
+    status: 404
+    file: null
+    result: not-found
+  - path: /.well-known/aauth-resource.json
+    status: 404
+    file: null
+    result: not-found
+- host: app.agrology.ag
+  kind: S3/CloudFront origin, no public object
+  note: Every path returns 403 AccessDenied as an S3 XML error document.
+  documents:
+  - path: /.well-known/security.txt
+    status: 403
+    file: null
+    result: s3-access-denied
+  - path: /.well-known/openid-configuration
+    status: 403
+    file: null
+    result: s3-access-denied
+  - path: /.well-known/oauth-authorization-server
+    status: 403
+    file: null
+    result: s3-access-denied
+  - path: /.well-known/oauth-protected-resource
+    status: 403
+    file: null
+    result: s3-access-denied
+  - path: /.well-known/api-catalog
+    status: 403
+    file: null
+    result: s3-access-denied
+  - path: /.well-known/ai-plugin.json
+    status: 403
+    file: null
+    result: s3-access-denied
+  - path: /.well-known/agent-card.json
+    status: 403
+    file: null
+    result: s3-access-denied
+  - path: /.well-known/agent.json
+    status: 403
+    file: null
+    result: s3-access-denied
+  - path: /.well-known/aauth-resource.json
+    status: 403
+    file: null
+    result: s3-access-denied
+hosts_not_resolving:
+  note: Checked and NXDOMAIN, so not probed.
+  hosts:
+  - docs.agrology.ag
+  - developer.agrology.ag
+  - developers.agrology.ag
+  - status.agrology.ag
+  - trust.agrology.ag
+  - mcp.agrology.ag
+  - support.agrology.ag
+  - help.agrology.ag
+  - blog.agrology.ag
+off_domain_discovery:
+  note: >-
+    Recorded for completeness. This document IS real and DOES describe Agrology's identity
+    provider, but it is served from AWS's domain rather than one Agrology controls, so it
+    is deliberately excluded from hosts[] above and earns no WellKnown pointer. It is
+    captured instead in authentication/agrology-authentication.yml and
+    scopes/agrology-scopes.yml.
+  url: https://cognito-idp.us-east-1.amazonaws.com/us-east-1_qBmvSfyNK/.well-known/openid-configuration
+  status: 200
+  kind: OIDC discovery for the Agrology Cognito user pool
+recommendation_to_provider: >-
+  A /.well-known/security.txt on agrology.ag and a /.well-known/api-catalog pointing at
+  https://github.com/agrology/public-api-docs would both be a few lines of static text,
+  and would make a contract the company already publishes openly discoverable by machine.
+  Serving the SPA shell under 200 for unmatched paths also actively breaks automated
+  discovery, because no crawler can distinguish a missing file from a served one.

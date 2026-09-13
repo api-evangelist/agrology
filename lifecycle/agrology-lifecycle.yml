@@ -1,0 +1,149 @@
+generated: '2026-09-13'
+method: searched
+source: https://github.com/agrology/public-api-docs/blob/main/README.md
+derived_from: openapi/agrology-public-api-openapi.yml
+api: Agrology Public API v2
+versioning:
+  scheme: uri-path major version
+  current: v2
+  base_url: https://api.agrology.ag/v2
+  spec_info_version: 1.0.0
+  response_version_field: request.responseVersion
+  response_version_observed: '2.1'
+  previous_versions_documented: false
+  note: >-
+    A v1 is implied by the "v2" path but is not documented and its status is unpublished.
+    The spec's info.version (1.0.0) and the runtime responseVersion (2.1) are independent
+    of each other and of the path version — three version numbers, none reconciled.
+  negotiation: none — no Accept-header or query-parameter versioning, no version response
+    header
+stability:
+  provider_statement: >-
+    "The Agrology API's OpenAPI specification is under development. It may include
+    endpoints that are not documented above. Response Schemas currently lack data typing
+    and are subject to change."
+  source: https://github.com/agrology/public-api-docs/blob/main/README.md#openapi-specification
+  reading: >-
+    The provider explicitly warns that the machine-readable contract is ahead of the
+    prose docs and that response schemas will change. An agent should treat the spec's
+    response types as advisory and the README's example bodies as the more reliable
+    description of what actually comes back.
+deprecation_policy:
+  published: false
+  sunset_header: false
+  deprecation_header: false
+  rfc8594: false
+  evidence: >-
+    No deprecation or sunset policy page exists on any Agrology surface, no operation in
+    the spec carries deprecated: true, and no Sunset or Deprecation response header is
+    documented or was observed on live probes of https://api.agrology.ag/v2.
+deprecated_operations:
+  count: 0
+  operations: []
+  method: derived
+  source: openapi/agrology-public-api-openapi.yml
+model_versioning:
+  published: true
+  url: https://agrology.ag/model-updates
+  title: Why your data sometimes looks a little different
+  last_reviewed: '2026-05-27'
+  method: searched
+  source: >-
+    The page is rendered client-side; its content was read from the shipped React bundle
+    at https://agrology.ag/assets/index-C7n1vIou.js, which carries the page copy and the
+    lastReviewed date inline.
+  scope: ML model releases, not API contract releases
+  summary: >-
+    Agrology publishes a standing policy on ML model retraining and the RETROACTIVE DATA
+    RESTATEMENT it causes. Updated models change the values returned for dates in the
+    PAST as well as the present — today's readings shift slightly, recent history shifts,
+    and derived aggregates (monthly averages, growing-season totals) move with them. The
+    company states the shape of the data (peaks, dry-downs, seasonal patterns) is
+    expected to remain familiar while precision improves. Retraining is triggered by new
+    ground-truth data, research-partner datasets, science-team edge-case fixes, or
+    expansion into new soil types, climates and crops.
+  triggers:
+  - new ground-truth data from Agrology's own measurements
+  - a fresh batch contributed by a research partner
+  - a better handling of an edge case found by the science team
+  - expansion into new soil types, climates or crops
+  release_notice: >-
+    The policy says the company will tell customers when a change is "meaningful enough",
+    but names no channel, no versioning of model releases, and no per-response model
+    identifier.
+  agent_impact: >-
+    THIS IS THE MOST CONSEQUENTIAL LIFECYCLE FACT FOR A CONSUMER OF THIS API. Historical
+    telemetry is NOT immutable. A value cached or reconciled against an earlier fetch can
+    legitimately differ on refetch with no error, no version change and no header to
+    detect it by. Any agent building a ledger, a carbon claim, or a compliance record
+    from Agrology synthetics or predictions must record the fetch time alongside the
+    value and must expect restatement. There is no published way to pin a model version
+    or request the values as-of a prior model.
+  affected_datasets:
+  - synthetics/microclimate
+  - predictions/microclimate
+  - historical/ground-truth (derived metrics)
+  unaffected: >-
+    Raw measured sensor values are not described as being restated; the policy concerns
+    the models that "turn raw sensor measurements into the readings you actually use".
+status_page:
+  published: false
+  url: null
+  evidence: >-
+    status.agrology.ag does not resolve (NXDOMAIN, probed 2026-09-13); no /status route
+    exists in the marketing site's shipped router manifest; no statuspage.io,
+    status.io, Better Stack or Instatus property is linked from any Agrology surface.
+  note: >-
+    No StatusPage pointer is emitted. An agent has no way to distinguish an Agrology
+    outage from its own failure.
+changelog:
+  published: false
+  evidence: >-
+    No dated API changelog, release-notes page or releases feed exists. The
+    /model-updates page is a standing policy explainer with a lastReviewed date, not a
+    list of dated entries, so it is recorded above rather than as a ChangeLog. The
+    public-api-docs repository's commit history is the only dated record of contract
+    change; its most recent push is 2026-07-01.
+  nearest_equivalent: https://github.com/agrology/public-api-docs/commits/main
+sla:
+  published: false
+  uptime_target: null
+  support_response_target: null
+  evidence: No SLA, uptime commitment or support-response target is published on any
+    Agrology surface.
+support:
+  channels:
+  - type: email
+    value: support@agrology.ag
+    source: https://api.github.com/orgs/agrology (org public email)
+  - type: web form
+    value: https://agrology.ag/contact
+  - type: in-product
+    value: POST /feedback
+    note: >-
+      The API carries its own feedback channel — FeedbackSubmission with feedbackType
+      feature/bug/other, a wantsFollowUp flag and an isTestMessage flag. Unusual and
+      genuinely useful: a machine client can file a bug through the same contract it
+      integrates.
+  developer_support_channel: >-
+    None dedicated. The public-api-docs repository has issues enabled but no published
+    support commitment.
+contract_history:
+  repository: https://github.com/agrology/public-api-docs
+  repository_created: '2024-06-11'
+  last_push: '2026-07-01'
+  license: Apache-2.0
+  method: searched
+  source: https://api.github.com/repos/agrology/public-api-docs
+  note: >-
+    Publishing the contract under Apache-2.0 in a public repository is a deliberate and
+    uncommon choice — it makes the spec forkable and gives consumers a dated, diffable
+    record of contract change in the absence of a changelog.
+gaps:
+- No deprecation or sunset policy, and no Sunset/Deprecation headers.
+- No status page — outages are undetectable to a machine client.
+- No dated changelog; commit history is the only substitute.
+- No SLA or uptime commitment.
+- Three unreconciled version numbers (path v2, info.version 1.0.0, responseVersion 2.1).
+- Model releases restate historical data with no version identifier, no as-of query and
+  no notification channel an agent can subscribe to.

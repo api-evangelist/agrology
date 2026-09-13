@@ -1,0 +1,50 @@
+generated: '2026-09-13'
+method: searched
+source: https://agrology.ag
+api: Agrology Public API v2
+plan_count: 0
+pricing_page: null
+public_pricing: false
+api_priced_separately: false
+note: >-
+  Agrology publishes NO pricing page and NO plan tiers. The marketing site is a
+  client-rendered React application; its shipped router manifest
+  (https://agrology.ag/assets/index-C7n1vIou.js) enumerates every real route — about,
+  platform, solutions, impact, resources, blog, press, media, webinars, white-papers,
+  case-studies, careers, contact, demo, model-updates, privacy, terms, agrology-chat and
+  the product pages — and there is no /pricing or /plans route among them. The only
+  price language anywhere on the property is inside an editorial article, which says
+  Agrology "offers an annual subscription that can be paid annually or monthly" and that
+  "farmers can monitor their acres for the cost of a Netflix subscription", with
+  installation and sensor replacement included. That is a comparison, not a rate card:
+  no currency, no figure, no per-acre unit, no tier names, no quotas.
+sales_motion:
+  model: contact-sales
+  entry_points:
+  - url: https://agrology.ag/demo
+    kind: demo request
+  - url: https://agrology.ag/contact
+    kind: contact form
+  note: >-
+    Hardware is installed on the customer's land, so the commercial motion is a
+    field-services subscription rather than self-serve signup. There is no self-service
+    checkout and no way to obtain API access without talking to Agrology — the README
+    says an API key is issued by contacting staff.
+api_access_cost:
+  documented: false
+  note: >-
+    Nothing states whether Public API access is included in the platform subscription or
+    priced as an add-on. A prospective integrator cannot determine the cost of API access
+    from any public source.
+quotas: []
+overages: []
+free_tier:
+  available: false
+  documented: false
+evidence:
+- url: https://agrology.ag/assets/index-C7n1vIou.js
+  status: 200
+  finding: shipped router manifest contains no pricing or plans route
+- url: https://agrology.ag/demo
+  status: 200
+  finding: demo-request route present — the sales entry point

@@ -1,0 +1,72 @@
+generated: '2026-09-13'
+method: searched
+source: registry searches + https://github.com/agrology + https://github.com/agrology/public-api-docs
+package_count: 0
+official_sdk_count: 0
+packages: []
+finding: >-
+  Agrology publishes NO client libraries. Every public registry was queried
+  unauthenticated and returned nothing first-party, and the provider's own docs offer no
+  SDK, no code samples in any language, and no generated client. An integrator writes
+  raw HTTP against https://api.agrology.ag/v2 — which, given the API's unusual
+  {timeRange} path grammar and its open metric maps, is more work than it looks.
+registries_checked:
+- registry: npm
+  query: https://registry.npmjs.org/-/v1/search?text=agrology&size=20
+  status: 200
+  results: 0
+  version: null
+  published: null
+- registry: PyPI
+  query: https://pypi.org/pypi/agrology/json
+  status: 404
+  results: 0
+  version: null
+  published: null
+- registry: GitHub (agrology organization)
+  query: https://api.github.com/orgs/agrology/repos
+  status: 200
+  public_repos: 2
+  results: 0
+  note: >-
+    Neither public repository is a client library. public-api-docs holds the README and
+    the OpenAPI only (LICENSE, README.md, openapi.yml — three files, no code).
+    multi-review is an unrelated internal engineering tool ("Human-gated multi-agent
+    review, packaged as a Claude Code plugin") and has nothing to do with the Agrology
+    API.
+not_packages:
+  note: >-
+    These are real Agrology-shipped client software, but they are end-user applications
+    distributed through app stores, not libraries a developer can depend on. Recorded so
+    a reader does not mistake their absence from packages[] for an oversight.
+  items:
+  - name: Agrology (iOS)
+    url: https://apps.apple.com/us/app/agrology/id1566443704
+    status: 200
+    kind: mobile application
+    note: >-
+      The API's own FeedbackSubmission schema names "Agrology iOS" as an example client,
+      confirming the mobile app is a first-party consumer of this same v2 API.
+  - name: Grower's Portal
+    url: https://grower.agrology.ag/
+    kind: web application
+    note: >-
+      First-party React SPA and the only self-service way to obtain a bearer token. Also
+      the only place a developer can see the API's real responses without a key.
+sdk_generation:
+  feasible: partial
+  note: >-
+    The published OpenAPI 3.0.1 is complete enough on paths, parameters and security to
+    generate a client skeleton, but it declares no error responses at all and no response
+    schemas for the telemetry endpoints (typed only as "string"). A generated client
+    would compile and would be nearly useless on the data path, which is likely why none
+    exists.
+  license_permits: true
+  license: Apache-2.0
+  license_note: >-
+    The contract is published under Apache-2.0, so a third party is explicitly free to
+    generate, publish and distribute a client from it.
+recommendation_to_provider: >-
+  Adding typed response schemas to the five time-series endpoints would make generated
+  SDKs viable; publishing even one generated client under the existing Apache-2.0 licence
+  would remove the largest practical barrier to integration.

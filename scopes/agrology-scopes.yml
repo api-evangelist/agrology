@@ -1,0 +1,40 @@
+generated: '2026-09-13'
+method: probed
+source: https://cognito-idp.us-east-1.amazonaws.com/us-east-1_qBmvSfyNK/.well-known/openid-configuration
+docs: https://github.com/agrology/public-api-docs/blob/main/README.md#authentication-security
+http_status: 200
+applies_to: >-
+  IDENTITY-PROVIDER SCOPES ONLY. These are the OIDC scopes the Amazon Cognito user
+  pool behind the Agrology Grower's Portal advertises for issuing an identity. They
+  are NOT API authorization scopes: the Agrology Public API v2 declares a single
+  http/bearer securityScheme with no oauth2 flows and no scope list, and gates access
+  by an entity ACL (GET /access) rather than by scope. Recorded here because they are
+  real, published and anonymously verifiable, and because a client integrating the
+  login flow needs them.
+scope_source: oidc-discovery
+scope_count: 4
+scopes:
+- name: openid
+  description: Required to request an ID token from the Cognito user pool; establishes
+    the OIDC flow.
+  standard: OpenID Connect Core 1.0
+- name: email
+  description: Releases the email and email_verified claims for the signed-in grower.
+  standard: OpenID Connect Core 1.0
+- name: phone
+  description: Releases the phone_number and phone_number_verified claims.
+  standard: OpenID Connect Core 1.0
+- name: profile
+  description: Releases the default profile claims for the signed-in user.
+  standard: OpenID Connect Core 1.0
+authorization_endpoint: https://auth.agrology.ag/oauth2/authorize
+token_endpoint: https://auth.agrology.ag/oauth2/token
+api_scope_coverage:
+  documented: false
+  note: >-
+    No per-operation scope, permission or role vocabulary is published for the 90
+    Public API operations. Authorization is resolved from the caller's access list.
+    The access-grant endpoint POST /access/manage/{customerID}/{accessUser}/{accessLevel}
+    implies an accessLevel vocabulary; only the value "admin" appears in the published
+    example. An agent cannot determine, before calling, which operations its credential
+    may invoke — it must call GET /access and read the returned roles.

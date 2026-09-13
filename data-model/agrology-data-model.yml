@@ -1,0 +1,407 @@
+generated: '2026-09-13'
+method: derived
+source: openapi/agrology-public-api-openapi.yml
+searched: https://github.com/agrology/public-api-docs/blob/main/README.md
+api: Agrology Public API v2
+summary:
+  declared_schemas: 22
+  distinct_entities: 11
+  note: >-
+    The 22 components.schemas are 11 entities plus their 11 array wrappers
+    (Experiment/Experiments, Dashboard/Dashboards, and so on). The telemetry core of
+    the API — Customer, Site, Node, Device, Metric, Sample, Alert — has NO declared
+    schema at all: those shapes exist only as documented JSON examples in the README,
+    which the provider flags as "Response Schemas currently lack data typing".
+identifier_conventions:
+  documented: true
+  source: https://github.com/agrology/public-api-docs/blob/main/README.md#users-access-list
+  rules:
+  - entity: Customer
+    shape: slug OR uuid
+    note: Older customers use slug-style ids (e.g. "agrology"); newer ones use UUIDs.
+    example_slug: agrology
+  - entity: Site
+    shape: slug OR uuid
+    note: Older sites use slug-style ids; newer ones use UUIDs.
+    example_slug: austin-research-station
+    example_uuid: abc391cd-b8cd-4e47-b7ab-8e91f9ebbe6e
+  - entity: Node
+    shape: uuid
+    note: All Nodes are identified by UUIDs.
+    example: 516dbc83-8ee1-4f18-af23-0859259c81be
+  - entity: Device
+    shape: hardware identifier (hex)
+    note: Neither slug nor UUID — a LoRaWAN DevEUI-style or serial identifier.
+    examples:
+    - 70B3D57BA000163E
+    - 383737326F308105
+  agent_warning: >-
+    Identifier shape does not identify entity type and must not be validated as a UUID.
+entities:
+- name: Customer
+  declared_schema: false
+  role: >-
+    The top-level tenant. Every non-topology path is rooted at {customerID}, so it is
+    the de-facto partition key of the whole API.
+  discovered_via: GET /access (siteAccess[].customer, siteAccess[].displayName)
+  fields_observed:
+  - customer
+  - displayName
+- name: Site
+  declared_schema: false
+  role: A physical growing location (vineyard block, ranch, research station).
+  fields_observed:
+  - id
+  - displayName
+  - name
+  - siteClassificaiton
+  - customer
+  - role
+  - country
+  - displayUnits
+  - timezone
+  note: >-
+    siteClassificaiton is spelled that way in the provider's own GeoJSON example
+    (observed value "lab"); a consumer must match the misspelling.
+- name: Node
+  declared_schema: false
+  role: >-
+    A sensor station installed at a site. The unit that carries geometry and the unit
+    telemetry samples are grouped by.
+  fields_observed:
+  - id
+  - name
+  - site
+  - deviceIDs
+  - devices
+  - elevationMeters
+  - crops
+  - geometry
+- name: Device
+  declared_schema: false
+  role: An individual sensor attached to a node.
+  fields_observed:
+  - id
+  - make
+  - model
+  - deviceType
+  - position
+  - lastMessage
+  - lastPayload
+  - isMonitored
+  values_observed:
+    make:
+    - agrology
+    - decentlab
+    model:
+    - v1_ground
+    - trs12
+    - trs21
+    deviceType:
+    - gV1
+    - smp
+    - vwc
+    - gV2
+    - co2
+  vocabulary_endpoint: GET /historical/ground-truth/device-types
+- name: Metric
+  declared_schema: false
+  role: >-
+    A measurable quantity. Metrics are a first-class, ENDPOINT-RESOLVED vocabulary
+    rather than a fixed schema — this is the central design decision of the API.
+  fields_observed:
+  - id
+  - displayName
+  - units
+  - description
+  vocabulary_endpoints:
+  - GET /metrics
+  - GET /historical/ground-truth/metrics
+  - GET /historical/weather/metrics
+  - GET /predictions/microclimate/metrics
+  - GET /predictions/weather/metrics
+  - GET /synthetics/microclimate/metrics
+  values_observed:
+  - airTemp
+  - humidity
+  - totalVOCs
+  - soilMoisture
+  - soilTension
+  - soilConductivity
+  - soilTemperature
+  - waterPotential
+  - barometricPressure
+  - battery
+  - vpd
+  - dewPoint
+  - epaIndex
+  - windSpeed
+  - vwc
+  - co2Concentration
+- name: Sample
+  declared_schema: false
+  role: One timestamped reading from one device, nested under a node.
+  fields_observed:
+  - ts
+  - dev
+  - d
+  note: >-
+    `d` is an OPEN map of metric id to numeric value. Its keys vary by device type and
+    dataset, so a static type cannot be generated for it.
+- name: Alert
+  declared_schema: false
+  role: A threshold event raised for a customer across one or more sites.
+  fields_observed:
+  - id
+  - insight
+  - startTime
+  - updateTime
+  - customer
+  - sites
+  - eventValues
+  event_values_fields:
+  - origin
+  - title
+  - headline
+  - location
+  - points
+  values_observed:
+    insight:
+    - temperature
+  note: >-
+    startTime/updateTime are ISO-8601 strings here, unlike the epoch integers used
+    throughout the rest of the API — a real inconsistency an agent must handle.
+- name: Experiment
+  declared_schema: true
+  schema: Experiment
+  fields:
+  - customerID
+  - id
+  - description
+  - status
+  - notes
+  - startTime
+  - endTime
+  - notice
+  - noticeLevel
+  - noticeExpires
+  - positionFilter
+  required:
+  - customerID
+  - id
+- name: ExperimentGroup
+  declared_schema: true
+  schema: ExperimentGroup
+  required:
+  - experimentID
+  - id
+- name: ExperimentMember
+  declared_schema: true
+  schema: ExperimentMember
+  role: Binds a Node into an ExperimentGroup — the join entity of the experiment graph.
+- name: ExperimentMetric
+  declared_schema: true
+  schema: ExperimentMetric
+  role: Selects which Metrics an Experiment tracks.
+- name: ReportDefinition
+  declared_schema: true
+  schema: ReportDefinition
+  fields:
+  - id
+  - customerID
+  - aggregate
+  - entryType
+  - eventBridgeArn
+  - offsetSecs
+  - scope
+  - targetID
+  - templateID
+  required:
+  - customerID
+  - id
+  note: >-
+    eventBridgeArn leaks an internal AWS EventBridge integration into the public
+    contract — reports are dispatched through EventBridge.
+- name: ReportRun
+  declared_schema: true
+  schema: ReportRun
+  fields:
+  - customerID
+  - id
+  - ts
+  - status
+  - reportDefinitionID
+  - executionTime
+  required:
+  - customerID
+  - id
+- name: LibraryChart
+  declared_schema: true
+  schema: LibraryChart
+  fields:
+  - id
+  - customerID
+  - description
+  - folder
+  - definition
+  note: >-
+    `definition` is typed as a plain string — a serialized chart spec whose grammar is
+    not published. An agent cannot author a valid chart without an existing example.
+- name: Dashboard
+  declared_schema: true
+  schema: Dashboard
+  note: Owned by {owner} rather than {customerID} — the only entity keyed that way.
+- name: CustomerInput
+  declared_schema: true
+  schema: CustomerInput
+  role: Grower-supplied annotation/observation, filed under a category.
+  vocabulary_endpoint: GET /customer-inputs/categories
+- name: CustomerFile
+  declared_schema: true
+  schema: CustomerFile
+- name: PreSignedURLResponse
+  declared_schema: true
+  schema: PreSignedURLResponse
+  role: The short-lived download credential returned by the fileserver endpoints.
+- name: FeedbackSubmission
+  declared_schema: true
+  schema: FeedbackSubmission
+  required:
+  - customer
+  - feedbackType
+  - remarks
+  - client
+  - clientVersion
+  enums:
+    feedbackType:
+    - feature
+    - bug
+    - other
+  note: >-
+    The best-documented schema in the spec — every property carries a description. It
+    is also the only write in the API that is not a CRUD operation on a customer
+    resource.
+relationships:
+- from: Customer
+  to: Site
+  kind: has_many
+  via: siteAccess[].sites
+  evidence: GET /access response shape
+- from: Site
+  to: Node
+  kind: has_many
+  via: nodes / geometry features with elementType "node"
+  evidence: GeoJSON example; /historical/ground-truth/{siteID}/node/{nodeID}/{timeRange}
+- from: Node
+  to: Device
+  kind: has_many
+  via: deviceIDs[] and devices{}
+  evidence: GeoJSON node feature properties
+- from: Device
+  to: Sample
+  kind: has_many
+  via: nodes{}.samples[].dev
+  evidence: time-series response envelope
+- from: Sample
+  to: Metric
+  kind: has_many
+  via: d{} keys
+  evidence: time-series response envelope; metric ids resolve against the /metrics
+    endpoints
+- from: Customer
+  to: Alert
+  kind: has_many
+  via: customerID path segment
+  evidence: GET /alerts/customer/{customerID}
+- from: Alert
+  to: Site
+  kind: has_many
+  via: sites[]
+  evidence: alert example body
+- from: Customer
+  to: Experiment
+  kind: has_many
+  via: customerID
+  evidence: GET /experiments/customer/{customerID}
+- from: Experiment
+  to: ExperimentGroup
+  kind: has_many
+  via: experimentID
+  evidence: GET /experiments/groups/{customerID}/{experimentID}
+- from: ExperimentGroup
+  to: ExperimentMember
+  kind: has_many
+  via: groupID
+  evidence: GET /experiments/members/{customerID}/group-id/{groupID}
+- from: ExperimentMember
+  to: Node
+  kind: belongs_to
+  via: nodeID
+  evidence: /experiments/members/{customerID}/{experimentID}/{groupID}/{nodeID}
+- from: Experiment
+  to: ExperimentMetric
+  kind: has_many
+  via: experimentID
+  evidence: GET /experiments/metrics/{customerID}/experiment-id/{experimentID}
+- from: Customer
+  to: ReportDefinition
+  kind: has_many
+  via: customerID
+  evidence: GET /report-definitions/customer/{customerID}
+- from: ReportDefinition
+  to: ReportRun
+  kind: has_many
+  via: reportDefinitionID
+  evidence: GET /report-runs/report-definition-id/{customerID}/{reportDefinitionID}
+- from: Customer
+  to: LibraryChart
+  kind: has_many
+  via: customerID
+  evidence: GET /library-charts/customer/{customerID}
+- from: Customer
+  to: CustomerInput
+  kind: has_many
+  via: customerID
+  evidence: GET /customer-inputs/customer/{customerID}
+- from: Customer
+  to: CustomerFile
+  kind: has_many
+  via: customerID
+  evidence: GET /fileserver/customer/{customerID}
+- from: Owner
+  to: Dashboard
+  kind: has_many
+  via: owner
+  evidence: GET /dashboards/owner/{owner}
+datasets:
+  note: >-
+    Five interchangeable time-series datasets share one response envelope and one
+    addressing scheme (site, node, optional device, time range). Choosing between them
+    is choosing a provenance, not a different API.
+  sets:
+  - id: historical/ground-truth
+    provenance: Agrology in-field sensors (measured)
+  - id: historical/weather
+    provenance: Tomorrow.io weather service (third-party, measured)
+  - id: synthetics/microclimate
+    provenance: Agrology ML models applied to historical ground-truth to synthesize
+      additional metrics over past time
+  - id: predictions/microclimate
+    provenance: Agrology statistical model over weather forecasts + ground-truth
+    horizon: up to 4 days ahead
+  - id: predictions/weather
+    provenance: Tomorrow.io forecast (third-party)
+    horizon: up to 4 days ahead
+third_party_data:
+  tomorrow_io:
+    role: supplies historical weather service data and weather predictions
+    url: https://tomorrow.io
+    source: https://github.com/agrology/public-api-docs/blob/main/README.md
+gaps:
+- The core telemetry entities (Customer, Site, Node, Device, Metric, Sample, Alert)
+  have no declared schema; their shapes are only knowable from README examples.
+- The README states explicitly that it "does not describe the relationship between
+  Customers, Sites, Nodes" and directs readers to contact Agrology — the relationships
+  above are derived from path structure and example bodies, not from a published ERD.
+- LibraryChart.definition and Dashboard layout grammars are unpublished strings.
+- The accessLevel and role vocabularies are unpublished.

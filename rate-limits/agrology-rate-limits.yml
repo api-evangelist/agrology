@@ -1,0 +1,65 @@
+generated: '2026-09-13'
+method: probed
+source: https://github.com/agrology/public-api-docs/blob/main/README.md
+probed_url: https://api.agrology.ag/v2/access
+api: Agrology Public API v2
+limit_count: 0
+documented: false
+headers: []
+exhaustion_status: null
+retry_after: false
+note: >-
+  Agrology publishes NO rate limits for the Public API v2. The 18KB provider README
+  covers authentication, time ranges, filtering, ordering, every dataset and the file
+  flow, and never mentions throttling, quotas, burst allowances or a 429. The 71KB
+  OpenAPI declares no 429 response on any of its 90 operations. Live unauthenticated
+  probes of https://api.agrology.ag/v2/access returned no X-RateLimit-*, no RateLimit-*
+  and no Retry-After header on either the 403 (no credential) or the 401 (invalid key)
+  response. An honest zero: this was checked, not skipped.
+observed_response_headers:
+  method: probed
+  date: '2026-09-13'
+  on_403_no_credential:
+  - date
+  - content-type
+  - content-length
+  - x-amzn-requestid
+  - x-amzn-errortype
+  - x-amz-apigw-id
+  on_401_invalid_key:
+  - date
+  - content-type
+  - content-length
+  - x-amzn-requestid
+  - access-control-allow-origin
+  - access-control-allow-headers
+  - access-control-allow-methods
+  - x-amz-apigw-id
+  - x-amzn-trace-id
+  rate_limit_headers_present: false
+infrastructure_note: >-
+  The API is served by Amazon API Gateway (x-amzn-requestid, x-amz-apigw-id,
+  MissingAuthenticationTokenException). API Gateway applies account-level throttling and
+  can enforce per-key usage plans by default, so limits very likely exist at the
+  platform layer — but Agrology publishes none of them, so their values, windows and
+  exhaustion behaviour are unknown to a consumer. This is an inference about the
+  infrastructure, NOT a recorded limit, and nothing is claimed as a number.
+volume_control_actually_published:
+  note: >-
+    In place of rate limits, the published mechanism for bounding cost is payload size:
+    the {timeRange} path segment and the optional deviceType / metrics query filters
+    decide how much data one call returns. There is no pagination, so a wide time range
+    is a single large response rather than many small ones.
+  parameters:
+  - '{timeRange} path segment'
+  - '?deviceType='
+  - '?metrics='
+agent_impact: >-
+  An agent cannot pre-compute a safe call rate, cannot detect throttling from a
+  documented status code, and has no Retry-After to back off against. The safe posture
+  is conservative concurrency, exponential backoff on any 429 or 5xx, and narrow time
+  ranges with explicit metric filters rather than unfiltered wide-range pulls.
+recommendation_to_provider: >-
+  Publishing the API Gateway usage-plan values already in force, and returning
+  Retry-After on throttle, would cost nothing to operate and would let machine clients
+  behave correctly.

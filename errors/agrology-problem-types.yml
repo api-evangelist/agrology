@@ -1,0 +1,137 @@
+generated: '2026-09-13'
+method: derived
+source: openapi/agrology-public-api-openapi.yml
+searched: https://github.com/agrology/public-api-docs/blob/main/README.md
+probed: https://api.agrology.ag/v2/access
+api: Agrology Public API v2
+format: non-standard
+rfc9457: false
+content_type: application/json
+envelope:
+  shape: '{"message": "<text>"}'
+  fields:
+  - name: message
+    type: string
+    description: Human-readable failure text. No machine-readable code, type URI,
+      field pointer or correlation id is carried in the body.
+  source: >-
+    AWS API Gateway default error envelope, observed live. Not declared anywhere in
+    the provider's spec or docs.
+spec_coverage:
+  operations: 90
+  operations_declaring_4xx: 0
+  operations_declaring_5xx: 0
+  declared_status_codes:
+  - '200'
+  - '201'
+  - '204'
+  finding: >-
+    THE SPEC DECLARES NO FAILURE RESPONSES AT ALL. Every one of the 90 operations
+    declares only its success code, so an SDK or agent generated from this contract has
+    no typed error path whatsoever. This is the single largest gap in the published
+    contract, and it is consistent with the provider's own caveat that the OpenAPI is
+    "under development" and that "Response Schemas currently lack data typing and are
+    subject to change".
+problem_types:
+- id: missing-authentication-token
+  status: 403
+  title: No credential presented
+  envelope: '{"message":"Forbidden"}'
+  aws_error_type: MissingAuthenticationTokenException
+  method: probed
+  evidence: >-
+    GET https://api.agrology.ag/v2/access with no Authorization and no x-api-key header
+    returned HTTP 403 with x-amzn-errortype: MissingAuthenticationTokenException
+    (probed 2026-09-13).
+  remediation: >-
+    Attach either 'Authorization: Bearer $ACCESS_TOKEN' or 'x-api-key: $API_KEY'.
+  contradiction: >-
+    The README states that "Any API request without a Bearer Token or API Key will be
+    rejected with a 401 Unauthorized error". The observed status is 403, not 401. An
+    agent branching only on 401 will misclassify the unauthenticated case as a
+    permissions failure and may retry forever.
+  retryable: false
+- id: unauthorized
+  status: 401
+  title: Credential present but rejected
+  method: probed
+  evidence: >-
+    GET https://api.agrology.ag/v2/access with 'x-api-key: not-a-real-key' returned
+    HTTP 401 (probed 2026-09-13).
+  causes:
+  - Invalid or revoked API key.
+  - Expired bearer token — Cognito access tokens expire 1 hour after issue.
+  remediation: >-
+    For a bearer token, return to https://grower.agrology.ag/ and collect a fresh one
+    from the application footer; there is no refresh flow. For an API key, contact
+    Agrology staff.
+  retryable: false
+  retryable_after_reauth: true
+- id: forbidden-entity
+  status: 403
+  title: Credential valid but the entity is outside the caller's access list
+  method: derived
+  evidence: >-
+    Derived from the documented authorization model: every data path is scoped by
+    {customerID}, {siteID} or {nodeID}, and GET /access returns the caller's permitted
+    set. Requesting an entity outside that set is an authorization failure. The exact
+    status and body for this case are NOT published and were not probed, because doing
+    so would require a credential.
+  confidence: medium
+  remediation: >-
+    Call GET /access first and only address customers, sites and nodes it returns.
+  retryable: false
+- id: malformed-time-range
+  status: unknown
+  title: Time range does not parse
+  method: derived
+  evidence: >-
+    Derived from the README's Time Ranges rules, which are strict: relative units are
+    limited to s/m/h/d/w, compound relative times such as 2h5m are unsupported, epoch
+    seconds must be exactly 10 digits, epoch milliseconds exactly 13, and the two
+    human-readable forms exactly 12 and 14 digits beginning with '20'. The hyphen
+    separator is required even when the end time is omitted.
+  confidence: medium
+  note: >-
+    The docs state the constraints but never state the failure status or body. Unknown
+    is the honest value; do not assume 400.
+  remediation: Zero-pad timestamps, never trim, and always include the trailing hyphen.
+  retryable: false
+- id: unknown-filter-value
+  status: unknown
+  title: deviceType or metrics value not in the published vocabulary
+  method: derived
+  evidence: >-
+    The README requires that deviceType values match ids from
+    GET /historical/ground-truth/device-types and that metrics values match ids from the
+    matching /metrics endpoint. The behaviour on an unrecognised value — error, empty
+    result, or silent ignore — is not documented.
+  confidence: low
+  remediation: Resolve both vocabularies from their endpoints before filtering.
+  retryable: false
+- id: expired-presigned-url
+  status: n/a
+  title: Pre-signed file URL used after expiry
+  method: derived
+  evidence: >-
+    The README's file-access flow exchanges an s3:// location for temporary pre-signed
+    credentials via the fileserver endpoint. The TTL is not published.
+  confidence: medium
+  remediation: >-
+    Follow the returned URL immediately; never cache or persist it. Re-call the
+    fileserver endpoint to mint a new one.
+  retryable: true
+  retry_strategy: re-mint, do not retry the expired URL
+gaps:
+- No 4xx or 5xx response is declared on any operation in the OpenAPI.
+- No error code registry, no machine-readable error type, no field-level validation
+  pointer.
+- The documented 401-on-missing-credential contradicts the observed 403.
+- No error body is documented anywhere; the observed envelope is the gateway default.
+- Failure statuses for validation errors (time range, filters, unknown ids) are entirely
+  unpublished.
+recommendation_to_provider: >-
+  Declaring even a single shared 4xx response component and applying it across the 90
+  operations would give every generated client a typed error path, and correcting the
+  README's 401/403 statement would remove a live contradiction between the docs and the
+  deployed gateway.

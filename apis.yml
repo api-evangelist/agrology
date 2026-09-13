@@ -1,18 +1,93 @@
 aid: agrology
 name: Agrology
-description: 'Agrology is a company surfaced via the API Evangelist harvest backlog (source: secondary-market)
-  and added to the network as a stub for full-pipeline profiling.'
+description: 'Agrology is a Delaware Public Benefit Corporation building a predictive
+  agriculture platform for specialty crops, vineyards and regenerative row-crop operations.
+  Its patented in-field sensor nodes capture ground-truth agronomic telemetry — soil
+  moisture and tension, soil and air temperature, humidity, vapor pressure deficit,
+  barometric pressure, total VOCs, CO2 and nitrous-oxide flux — and feed machine-learning
+  models that produce microclimate predictions, synthetic metrics and threshold alerts
+  for frost, extreme heat, irrigation and smoke taint. The company publishes a first-party
+  Agrology Public API v2 (OpenAPI 3.0.1, 90 operations at https://api.agrology.ag/v2)
+  from its own GitHub organization, covering site and node topology, GeoJSON geometry,
+  historical ground-truth and weather data, microclimate and weather predictions, alerts,
+  reports, dashboards, charts and field experiments.'
+image: https://avatars.githubusercontent.com/u/55110899?v=4
 url: https://raw.githubusercontent.com/api-evangelist/agrology/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
 specificationVersion: '0.20'
 created: '2026-09-13'
 modified: '2026-09-13'
+position: Producing
 tags:
 - Company
-apis: []
+- Agriculture
+- AgTech
+- Climate
+- Sensors
+- Internet of Things
+- Weather
+- Soil
+- Carbon
+- Predictive Analytics
+- Geospatial
+- Time Series
+- Machine Learning
+- Viticulture
+- Sustainability
+- Environmental Monitoring
+apis:
+- name: Agrology Public API v2
+  description: 'The Agrology Public API v2 exposes site and node configuration, GeoJSON
+    geometry, historical ground-truth sensor telemetry, historical and forecast weather
+    service data, ML-derived synthetic microclimate metrics, microclimate predictions,
+    customer alerts, report definitions and runs, library charts, dashboards, customer
+    inputs and field experiments. All requests are authenticated with a Cognito-issued
+    bearer JWT or an Agrology-issued x-api-key.'
+  image: https://avatars.githubusercontent.com/u/55110899?v=4
+  humanURL: https://github.com/agrology/public-api-docs
+  baseURL: https://api.agrology.ag/v2
+  tags:
+  - Agriculture
+  - Sensors
+  - Weather
+  - Soil
+  - Predictions
+  - Geospatial
+  - Time Series
+  properties:
+  - type: OpenAPI
+    url: openapi/agrology-public-api-openapi.yml
+  - type: Documentation
+    url: https://github.com/agrology/public-api-docs/blob/main/README.md
+  - type: APIReference
+    url: https://github.com/agrology/public-api-docs/blob/main/openapi.yml
+  - type: SourceCode
+    url: https://github.com/agrology/public-api-docs
+  - type: Overlay
+    url: overlays/agrology-public-api-overlay.yaml
+  - type: Authentication
+    url: authentication/agrology-authentication.yml
+  - type: OAuthScopes
+    url: scopes/agrology-scopes.yml
+  - type: Conventions
+    url: conventions/agrology-conventions.yml
+  - type: ErrorCatalog
+    url: errors/agrology-problem-types.yml
+  - type: DataModel
+    url: data-model/agrology-data-model.yml
+  - type: Examples
+    url: examples/agrology-public-api-examples.yml
+  - type: Conformance
+    url: conformance/agrology-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/agrology-lifecycle.yml
+  - type: RateLimits
+    url: rate-limits/agrology-rate-limits.yml
+  - type: Plans
+    url: plans/agrology-plans-pricing.yml
+  - type: AgentSkill
+    url: skills/_index.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -20,4 +95,31 @@ maintainers:
   email: info@apis.io
 common:
 - type: Website
-  url: https://www.nasdaqprivatemarket.com/
+  url: https://agrology.ag
+- type: Documentation
+  url: https://github.com/agrology/public-api-docs/blob/main/README.md
+- type: APIReference
+  url: https://github.com/agrology/public-api-docs/blob/main/openapi.yml
+- type: GitHubOrganization
+  url: https://github.com/agrology
+- type: Blog
+  url: https://agrology.ag/blog
+- type: Support
+  url: https://agrology.ag/contact
+- type: Login
+  url: https://grower.agrology.ag/
+- type: TermsOfService
+  url: https://agrology.ag/terms
+- type: PrivacyPolicy
+  url: https://agrology.ag/privacy
+- type: Packages
+  url: packages/agrology-packages.yml
+- type: DomainSecurity
+  url: security/agrology-domain-security.yml
+- type: LLMsTxt
+  url: llms/agrology-llms.txt
+x-enrichment:
+  date: '2026-09-13'
+  status: enriched
+  artifacts_added: 22
+  pass: local-v3

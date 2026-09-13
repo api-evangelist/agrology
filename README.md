@@ -64,5 +64,54 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Agrology is a company surfaced via the API Evangelist harvest backlog (source: secondary-market) and added to the network as a stub for full-pipeline profiling.
-- https://www.nasdaqprivatemarket.com/
+Agrology is a Delaware Public Benefit Corporation building a predictive agriculture
+platform for specialty crops, vineyards and regenerative row-crop operations. In-field
+sensor nodes capture ground-truth agronomic telemetry — soil moisture, tension,
+conductivity and temperature, air temperature, humidity, vapor pressure deficit,
+barometric pressure, total VOCs, CO2 and nitrous-oxide flux — and machine-learning models
+turn it into microclimate predictions, synthetic metrics and threshold alerts for frost,
+extreme heat, irrigation and smoke taint.
+
+## The API
+
+Agrology publishes a first-party **Agrology Public API v2** as OpenAPI 3.0.1 — 66 paths,
+90 operations, 22 component schemas — from its own GitHub organization under Apache-2.0.
+
+- Base URL: <https://api.agrology.ag/v2>
+- Contract: <https://github.com/agrology/public-api-docs>
+- Auth: bearer JWT (Cognito, one-hour lifetime) or a staff-issued `x-api-key`
+
+The surface covers site and node topology, field geometry as RFC 7946 GeoJSON, historical
+ground-truth sensor telemetry, historical and forecast weather data (Tomorrow.io),
+ML-synthesized microclimate metrics, microclimate predictions, threshold alerts, reports,
+dashboards, charts, customer inputs and field experiments.
+
+## Notable findings from this profile
+
+- **The contract is published openly under Apache-2.0**, which is uncommon and makes the
+  spec forkable and diffable — it is also the only dated record of contract change, since
+  there is no changelog.
+- **Historical data is not immutable.** Agrology publishes a standing policy
+  (<https://agrology.ag/model-updates>) that retraining its models restates values for
+  *past* dates, with no version identifier, no as-of query and no header to detect it by.
+  This is the single most consequential fact for any consumer building a ledger or a
+  carbon claim on this data.
+- **No operation declares a 4xx or 5xx response**, so a generated client has no typed
+  error path. The docs also state a missing credential returns 401; the deployed gateway
+  returns 403.
+- **One of seven delete surfaces is reversible** — dashboards can be undeleted; everything
+  else is permanent, and no retention window is published.
+- **No idempotency mechanism exists** on any of the 31 mutating operations.
+- **GeoJSON (RFC 7946) is the domain standard this API speaks**, and the templated
+  `historicalURL` / `predictionsURL` / `syntheticsURL` links inside the GeoJSON body are
+  its only link-following affordance.
+- Agrology publishes no SDKs, no CLI, no sandbox, no pricing, no status page, no MCP
+  server and no well-known documents on any of its hosts.
+
+## Links
+
+- Website: <https://agrology.ag>
+- Grower's Portal: <https://grower.agrology.ag/>
+- Agrology AI: <https://chat.agrology.ag>
+- GitHub: <https://github.com/agrology>
+- Contact: <https://agrology.ag/contact>
