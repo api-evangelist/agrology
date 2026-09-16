@@ -32,40 +32,44 @@ tags:
 - Predictive Analytics
 - Geospatial
 - Time Series
+- Machine-Learning
+- Viticulture
+- Sustainability
+- Environmental Monitoring
+tags_raw:
+- Company
+- Agriculture
+- AgTech
+- Climate
+- Sensors
+- Internet of Things
+- Weather
+- Soil
+- Carbon
+- Predictive Analytics
+- Geospatial
+- Time Series
 - Machine Learning
 - Viticulture
 - Sustainability
 - Environmental Monitoring
 apis:
-- name: Agrology Public API v2
-  description: 'The Agrology Public API v2 exposes site and node configuration, GeoJSON
-    geometry, historical ground-truth sensor telemetry, historical and forecast weather
-    service data, ML-derived synthetic microclimate metrics, microclimate predictions,
-    customer alerts, report definitions and runs, library charts, dashboards, customer
-    inputs and field experiments. All requests are authenticated with a Cognito-issued
-    bearer JWT or an Agrology-issued x-api-key.'
-  image: https://avatars.githubusercontent.com/u/55110899?v=4
+- aid: agrology:agrology-alerts-api
+  name: Agrology Alerts API
+  description: The Alerts API from Agrology — 1 operation(s) for alerts.
   humanURL: https://github.com/agrology/public-api-docs
   baseURL: https://api.agrology.ag/v2
   tags:
-  - Agriculture
-  - Sensors
-  - Weather
-  - Soil
-  - Predictions
-  - Geospatial
-  - Time Series
+  - Alerts
   properties:
   - type: OpenAPI
-    url: openapi/agrology-public-api-openapi.yml
+    url: openapi/agrology-alerts-api-openapi.yml
   - type: Documentation
     url: https://github.com/agrology/public-api-docs/blob/main/README.md
   - type: APIReference
     url: https://github.com/agrology/public-api-docs/blob/main/openapi.yml
   - type: SourceCode
     url: https://github.com/agrology/public-api-docs
-  - type: Overlay
-    url: overlays/agrology-public-api-overlay.yaml
   - type: Authentication
     url: authentication/agrology-authentication.yml
   - type: OAuthScopes
@@ -86,14 +90,520 @@ apis:
     url: rate-limits/agrology-rate-limits.yml
   - type: Plans
     url: plans/agrology-plans-pricing.yml
-  - type: AgentSkill
-    url: skills/_index.yml
+- aid: agrology:agrology-charts-api
+  name: Agrology Charts API
+  description: The Charts API from Agrology — 2 operation(s) for charts.
+  humanURL: https://github.com/agrology/public-api-docs
+  baseURL: https://api.agrology.ag/v2
+  tags:
+  - Charts
+  properties:
+  - type: OpenAPI
+    url: openapi/agrology-charts-api-openapi.yml
+  - type: Documentation
+    url: https://github.com/agrology/public-api-docs/blob/main/README.md
+  - type: APIReference
+    url: https://github.com/agrology/public-api-docs/blob/main/openapi.yml
+  - type: SourceCode
+    url: https://github.com/agrology/public-api-docs
+  - type: Authentication
+    url: authentication/agrology-authentication.yml
+  - type: OAuthScopes
+    url: scopes/agrology-scopes.yml
+  - type: Conventions
+    url: conventions/agrology-conventions.yml
+  - type: ErrorCatalog
+    url: errors/agrology-problem-types.yml
+  - type: DataModel
+    url: data-model/agrology-data-model.yml
+  - type: Examples
+    url: examples/agrology-public-api-examples.yml
+  - type: Conformance
+    url: conformance/agrology-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/agrology-lifecycle.yml
+  - type: RateLimits
+    url: rate-limits/agrology-rate-limits.yml
+  - type: Plans
+    url: plans/agrology-plans-pricing.yml
+- aid: agrology:agrology-dashboards-api
+  name: Agrology Dashboards API
+  description: The Dashboards API from Agrology — 10 operation(s) for dashboards.
+  humanURL: https://github.com/agrology/public-api-docs
+  baseURL: https://api.agrology.ag/v2
+  tags:
+  - Dashboards
+  properties:
+  - type: OpenAPI
+    url: openapi/agrology-dashboards-api-openapi.yml
+  - type: Documentation
+    url: https://github.com/agrology/public-api-docs/blob/main/README.md
+  - type: APIReference
+    url: https://github.com/agrology/public-api-docs/blob/main/openapi.yml
+  - type: SourceCode
+    url: https://github.com/agrology/public-api-docs
+  - type: Authentication
+    url: authentication/agrology-authentication.yml
+  - type: OAuthScopes
+    url: scopes/agrology-scopes.yml
+  - type: Conventions
+    url: conventions/agrology-conventions.yml
+  - type: ErrorCatalog
+    url: errors/agrology-problem-types.yml
+  - type: DataModel
+    url: data-model/agrology-data-model.yml
+  - type: Examples
+    url: examples/agrology-public-api-examples.yml
+  - type: Conformance
+    url: conformance/agrology-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/agrology-lifecycle.yml
+  - type: RateLimits
+    url: rate-limits/agrology-rate-limits.yml
+  - type: Plans
+    url: plans/agrology-plans-pricing.yml
+- aid: agrology:agrology-experiments-api
+  name: Agrology Experiments API
+  description: The Experiments API from Agrology — 14 operation(s) for experiments.
+  humanURL: https://github.com/agrology/public-api-docs
+  baseURL: https://api.agrology.ag/v2
+  tags:
+  - Experiments
+  properties:
+  - type: OpenAPI
+    url: openapi/agrology-experiments-api-openapi.yml
+  - type: Documentation
+    url: https://github.com/agrology/public-api-docs/blob/main/README.md
+  - type: APIReference
+    url: https://github.com/agrology/public-api-docs/blob/main/openapi.yml
+  - type: SourceCode
+    url: https://github.com/agrology/public-api-docs
+  - type: Authentication
+    url: authentication/agrology-authentication.yml
+  - type: OAuthScopes
+    url: scopes/agrology-scopes.yml
+  - type: Conventions
+    url: conventions/agrology-conventions.yml
+  - type: ErrorCatalog
+    url: errors/agrology-problem-types.yml
+  - type: DataModel
+    url: data-model/agrology-data-model.yml
+  - type: Examples
+    url: examples/agrology-public-api-examples.yml
+  - type: Conformance
+    url: conformance/agrology-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/agrology-lifecycle.yml
+  - type: RateLimits
+    url: rate-limits/agrology-rate-limits.yml
+  - type: Plans
+    url: plans/agrology-plans-pricing.yml
+- aid: agrology:agrology-feedback-api
+  name: Agrology Feedback API
+  description: The Feedback API from Agrology — 1 operation(s) for feedback.
+  humanURL: https://github.com/agrology/public-api-docs
+  baseURL: https://api.agrology.ag/v2
+  tags:
+  - Feedback
+  properties:
+  - type: OpenAPI
+    url: openapi/agrology-feedback-api-openapi.yml
+  - type: Documentation
+    url: https://github.com/agrology/public-api-docs/blob/main/README.md
+  - type: APIReference
+    url: https://github.com/agrology/public-api-docs/blob/main/openapi.yml
+  - type: SourceCode
+    url: https://github.com/agrology/public-api-docs
+  - type: Authentication
+    url: authentication/agrology-authentication.yml
+  - type: OAuthScopes
+    url: scopes/agrology-scopes.yml
+  - type: Conventions
+    url: conventions/agrology-conventions.yml
+  - type: ErrorCatalog
+    url: errors/agrology-problem-types.yml
+  - type: DataModel
+    url: data-model/agrology-data-model.yml
+  - type: Examples
+    url: examples/agrology-public-api-examples.yml
+  - type: Conformance
+    url: conformance/agrology-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/agrology-lifecycle.yml
+  - type: RateLimits
+    url: rate-limits/agrology-rate-limits.yml
+  - type: Plans
+    url: plans/agrology-plans-pricing.yml
+- aid: agrology:agrology-files-api
+  name: Agrology Files API
+  description: The Files API from Agrology — 3 operation(s) for files.
+  humanURL: https://github.com/agrology/public-api-docs
+  baseURL: https://api.agrology.ag/v2
+  tags:
+  - Files
+  properties:
+  - type: OpenAPI
+    url: openapi/agrology-files-api-openapi.yml
+  - type: Documentation
+    url: https://github.com/agrology/public-api-docs/blob/main/README.md
+  - type: APIReference
+    url: https://github.com/agrology/public-api-docs/blob/main/openapi.yml
+  - type: SourceCode
+    url: https://github.com/agrology/public-api-docs
+  - type: Authentication
+    url: authentication/agrology-authentication.yml
+  - type: OAuthScopes
+    url: scopes/agrology-scopes.yml
+  - type: Conventions
+    url: conventions/agrology-conventions.yml
+  - type: ErrorCatalog
+    url: errors/agrology-problem-types.yml
+  - type: DataModel
+    url: data-model/agrology-data-model.yml
+  - type: Examples
+    url: examples/agrology-public-api-examples.yml
+  - type: Conformance
+    url: conformance/agrology-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/agrology-lifecycle.yml
+  - type: RateLimits
+    url: rate-limits/agrology-rate-limits.yml
+  - type: Plans
+    url: plans/agrology-plans-pricing.yml
+- aid: agrology:agrology-ground-truth-api
+  name: Agrology Ground Truth API
+  description: The Ground Truth API from Agrology — 5 operation(s) for ground truth.
+  humanURL: https://github.com/agrology/public-api-docs
+  baseURL: https://api.agrology.ag/v2
+  tags:
+  - Ground Truth
+  properties:
+  - type: OpenAPI
+    url: openapi/agrology-ground-truth-api-openapi.yml
+  - type: Documentation
+    url: https://github.com/agrology/public-api-docs/blob/main/README.md
+  - type: APIReference
+    url: https://github.com/agrology/public-api-docs/blob/main/openapi.yml
+  - type: SourceCode
+    url: https://github.com/agrology/public-api-docs
+  - type: Authentication
+    url: authentication/agrology-authentication.yml
+  - type: OAuthScopes
+    url: scopes/agrology-scopes.yml
+  - type: Conventions
+    url: conventions/agrology-conventions.yml
+  - type: ErrorCatalog
+    url: errors/agrology-problem-types.yml
+  - type: DataModel
+    url: data-model/agrology-data-model.yml
+  - type: Examples
+    url: examples/agrology-public-api-examples.yml
+  - type: Conformance
+    url: conformance/agrology-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/agrology-lifecycle.yml
+  - type: RateLimits
+    url: rate-limits/agrology-rate-limits.yml
+  - type: Plans
+    url: plans/agrology-plans-pricing.yml
+- aid: agrology:agrology-metrics-api
+  name: Agrology Metrics API
+  description: The Metrics API from Agrology — 6 operation(s) for metrics.
+  humanURL: https://github.com/agrology/public-api-docs
+  baseURL: https://api.agrology.ag/v2
+  tags:
+  - Metrics
+  properties:
+  - type: OpenAPI
+    url: openapi/agrology-metrics-api-openapi.yml
+  - type: Documentation
+    url: https://github.com/agrology/public-api-docs/blob/main/README.md
+  - type: APIReference
+    url: https://github.com/agrology/public-api-docs/blob/main/openapi.yml
+  - type: SourceCode
+    url: https://github.com/agrology/public-api-docs
+  - type: Authentication
+    url: authentication/agrology-authentication.yml
+  - type: OAuthScopes
+    url: scopes/agrology-scopes.yml
+  - type: Conventions
+    url: conventions/agrology-conventions.yml
+  - type: ErrorCatalog
+    url: errors/agrology-problem-types.yml
+  - type: DataModel
+    url: data-model/agrology-data-model.yml
+  - type: Examples
+    url: examples/agrology-public-api-examples.yml
+  - type: Conformance
+    url: conformance/agrology-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/agrology-lifecycle.yml
+  - type: RateLimits
+    url: rate-limits/agrology-rate-limits.yml
+  - type: Plans
+    url: plans/agrology-plans-pricing.yml
+- aid: agrology:agrology-microclimate-api
+  name: Agrology Microclimate API
+  description: The Microclimate API from Agrology — 4 operation(s) for microclimate.
+  humanURL: https://github.com/agrology/public-api-docs
+  baseURL: https://api.agrology.ag/v2
+  tags:
+  - Microclimate
+  properties:
+  - type: OpenAPI
+    url: openapi/agrology-microclimate-api-openapi.yml
+  - type: Documentation
+    url: https://github.com/agrology/public-api-docs/blob/main/README.md
+  - type: APIReference
+    url: https://github.com/agrology/public-api-docs/blob/main/openapi.yml
+  - type: SourceCode
+    url: https://github.com/agrology/public-api-docs
+  - type: Authentication
+    url: authentication/agrology-authentication.yml
+  - type: OAuthScopes
+    url: scopes/agrology-scopes.yml
+  - type: Conventions
+    url: conventions/agrology-conventions.yml
+  - type: ErrorCatalog
+    url: errors/agrology-problem-types.yml
+  - type: DataModel
+    url: data-model/agrology-data-model.yml
+  - type: Examples
+    url: examples/agrology-public-api-examples.yml
+  - type: Conformance
+    url: conformance/agrology-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/agrology-lifecycle.yml
+  - type: RateLimits
+    url: rate-limits/agrology-rate-limits.yml
+  - type: Plans
+    url: plans/agrology-plans-pricing.yml
+- aid: agrology:agrology-reports-api
+  name: Agrology Reports API
+  description: The Reports API from Agrology — 5 operation(s) for reports.
+  humanURL: https://github.com/agrology/public-api-docs
+  baseURL: https://api.agrology.ag/v2
+  tags:
+  - Reports
+  properties:
+  - type: OpenAPI
+    url: openapi/agrology-reports-api-openapi.yml
+  - type: Documentation
+    url: https://github.com/agrology/public-api-docs/blob/main/README.md
+  - type: APIReference
+    url: https://github.com/agrology/public-api-docs/blob/main/openapi.yml
+  - type: SourceCode
+    url: https://github.com/agrology/public-api-docs
+  - type: Authentication
+    url: authentication/agrology-authentication.yml
+  - type: OAuthScopes
+    url: scopes/agrology-scopes.yml
+  - type: Conventions
+    url: conventions/agrology-conventions.yml
+  - type: ErrorCatalog
+    url: errors/agrology-problem-types.yml
+  - type: DataModel
+    url: data-model/agrology-data-model.yml
+  - type: Examples
+    url: examples/agrology-public-api-examples.yml
+  - type: Conformance
+    url: conformance/agrology-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/agrology-lifecycle.yml
+  - type: RateLimits
+    url: rate-limits/agrology-rate-limits.yml
+  - type: Plans
+    url: plans/agrology-plans-pricing.yml
+- aid: agrology:agrology-summary-data-api
+  name: Agrology Summary Data API
+  description: The Summary Data API from Agrology — 1 operation(s) for summary data.
+  humanURL: https://github.com/agrology/public-api-docs
+  baseURL: https://api.agrology.ag/v2
+  tags:
+  - Summary Data
+  properties:
+  - type: OpenAPI
+    url: openapi/agrology-summary-data-api-openapi.yml
+  - type: Documentation
+    url: https://github.com/agrology/public-api-docs/blob/main/README.md
+  - type: APIReference
+    url: https://github.com/agrology/public-api-docs/blob/main/openapi.yml
+  - type: SourceCode
+    url: https://github.com/agrology/public-api-docs
+  - type: Authentication
+    url: authentication/agrology-authentication.yml
+  - type: OAuthScopes
+    url: scopes/agrology-scopes.yml
+  - type: Conventions
+    url: conventions/agrology-conventions.yml
+  - type: ErrorCatalog
+    url: errors/agrology-problem-types.yml
+  - type: DataModel
+    url: data-model/agrology-data-model.yml
+  - type: Examples
+    url: examples/agrology-public-api-examples.yml
+  - type: Conformance
+    url: conformance/agrology-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/agrology-lifecycle.yml
+  - type: RateLimits
+    url: rate-limits/agrology-rate-limits.yml
+  - type: Plans
+    url: plans/agrology-plans-pricing.yml
+- aid: agrology:agrology-synthetics-api
+  name: Agrology Synthetics API
+  description: The Synthetics API from Agrology — 2 operation(s) for synthetics.
+  humanURL: https://github.com/agrology/public-api-docs
+  baseURL: https://api.agrology.ag/v2
+  tags:
+  - Synthetics
+  properties:
+  - type: OpenAPI
+    url: openapi/agrology-synthetics-api-openapi.yml
+  - type: Documentation
+    url: https://github.com/agrology/public-api-docs/blob/main/README.md
+  - type: APIReference
+    url: https://github.com/agrology/public-api-docs/blob/main/openapi.yml
+  - type: SourceCode
+    url: https://github.com/agrology/public-api-docs
+  - type: Authentication
+    url: authentication/agrology-authentication.yml
+  - type: OAuthScopes
+    url: scopes/agrology-scopes.yml
+  - type: Conventions
+    url: conventions/agrology-conventions.yml
+  - type: ErrorCatalog
+    url: errors/agrology-problem-types.yml
+  - type: DataModel
+    url: data-model/agrology-data-model.yml
+  - type: Examples
+    url: examples/agrology-public-api-examples.yml
+  - type: Conformance
+    url: conformance/agrology-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/agrology-lifecycle.yml
+  - type: RateLimits
+    url: rate-limits/agrology-rate-limits.yml
+  - type: Plans
+    url: plans/agrology-plans-pricing.yml
+- aid: agrology:agrology-topology-api
+  name: Agrology Topology API
+  description: The Topology API from Agrology — 5 operation(s) for topology.
+  humanURL: https://github.com/agrology/public-api-docs
+  baseURL: https://api.agrology.ag/v2
+  tags:
+  - Topology
+  properties:
+  - type: OpenAPI
+    url: openapi/agrology-topology-api-openapi.yml
+  - type: Documentation
+    url: https://github.com/agrology/public-api-docs/blob/main/README.md
+  - type: APIReference
+    url: https://github.com/agrology/public-api-docs/blob/main/openapi.yml
+  - type: SourceCode
+    url: https://github.com/agrology/public-api-docs
+  - type: Authentication
+    url: authentication/agrology-authentication.yml
+  - type: OAuthScopes
+    url: scopes/agrology-scopes.yml
+  - type: Conventions
+    url: conventions/agrology-conventions.yml
+  - type: ErrorCatalog
+    url: errors/agrology-problem-types.yml
+  - type: DataModel
+    url: data-model/agrology-data-model.yml
+  - type: Examples
+    url: examples/agrology-public-api-examples.yml
+  - type: Conformance
+    url: conformance/agrology-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/agrology-lifecycle.yml
+  - type: RateLimits
+    url: rate-limits/agrology-rate-limits.yml
+  - type: Plans
+    url: plans/agrology-plans-pricing.yml
+- aid: agrology:agrology-user-api
+  name: Agrology User API
+  description: The User API from Agrology — 1 operation(s) for user.
+  humanURL: https://github.com/agrology/public-api-docs
+  baseURL: https://api.agrology.ag/v2
+  tags:
+  - User
+  properties:
+  - type: OpenAPI
+    url: openapi/agrology-user-api-openapi.yml
+  - type: Documentation
+    url: https://github.com/agrology/public-api-docs/blob/main/README.md
+  - type: APIReference
+    url: https://github.com/agrology/public-api-docs/blob/main/openapi.yml
+  - type: SourceCode
+    url: https://github.com/agrology/public-api-docs
+  - type: Authentication
+    url: authentication/agrology-authentication.yml
+  - type: OAuthScopes
+    url: scopes/agrology-scopes.yml
+  - type: Conventions
+    url: conventions/agrology-conventions.yml
+  - type: ErrorCatalog
+    url: errors/agrology-problem-types.yml
+  - type: DataModel
+    url: data-model/agrology-data-model.yml
+  - type: Examples
+    url: examples/agrology-public-api-examples.yml
+  - type: Conformance
+    url: conformance/agrology-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/agrology-lifecycle.yml
+  - type: RateLimits
+    url: rate-limits/agrology-rate-limits.yml
+  - type: Plans
+    url: plans/agrology-plans-pricing.yml
+- aid: agrology:agrology-weather-api
+  name: Agrology Weather API
+  description: The Weather API from Agrology — 6 operation(s) for weather.
+  humanURL: https://github.com/agrology/public-api-docs
+  baseURL: https://api.agrology.ag/v2
+  tags:
+  - Weather
+  properties:
+  - type: OpenAPI
+    url: openapi/agrology-weather-api-openapi.yml
+  - type: Documentation
+    url: https://github.com/agrology/public-api-docs/blob/main/README.md
+  - type: APIReference
+    url: https://github.com/agrology/public-api-docs/blob/main/openapi.yml
+  - type: SourceCode
+    url: https://github.com/agrology/public-api-docs
+  - type: Authentication
+    url: authentication/agrology-authentication.yml
+  - type: OAuthScopes
+    url: scopes/agrology-scopes.yml
+  - type: Conventions
+    url: conventions/agrology-conventions.yml
+  - type: ErrorCatalog
+    url: errors/agrology-problem-types.yml
+  - type: DataModel
+    url: data-model/agrology-data-model.yml
+  - type: Examples
+    url: examples/agrology-public-api-examples.yml
+  - type: Conformance
+    url: conformance/agrology-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/agrology-lifecycle.yml
+  - type: RateLimits
+    url: rate-limits/agrology-rate-limits.yml
+  - type: Plans
+    url: plans/agrology-plans-pricing.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Overlay
+  url: overlays/agrology-public-api-overlay.yaml
+- type: AgentSkill
+  url: skills/_index.yml
 - type: Website
   url: https://agrology.ag
 - type: Documentation
