@@ -25,7 +25,7 @@ tags:
 - AgTech
 - Climate
 - Sensors
-- Internet of Things
+- IoT
 - Weather
 - Soil
 - Carbon
@@ -240,6 +240,8 @@ apis:
   humanURL: https://github.com/agrology/public-api-docs
   baseURL: https://api.agrology.ag/v2
   tags:
+  - File
+  tags_raw:
   - Files
   properties:
   - type: OpenAPI
