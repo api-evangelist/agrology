@@ -2,16 +2,16 @@
 kin_checks:
   slug: agrology
   schema_version: 0.22.0
-  scored_at: '2026-09-18'
-  run_ts: 2026-09-18T231945
+  scored_at: '2026-09-19'
+  run_ts: 2026-09-19T193153
   note: Actionable checks (missed + partial) in `checks`, plus the ids that did not
     apply in `na`. Everything else in rubric/scoring-0.22.0.yml was earned; counts
     below let you verify that.
   counts:
     total: 136
-    earned: 38
-    partial: 9
-    missed: 63
+    earned: 30
+    partial: 11
+    missed: 69
     na: 26
   checks:
   - id: multiple_apis
@@ -96,12 +96,24 @@ kin_checks:
     status: missed
   - id: postman_present
     status: missed
+  - id: support_channel
+    status: missed
+    detail: pointer liveness 0.0
+  - id: blog_present
+    status: missed
+    detail: pointer liveness 0.0
   - id: plans_present
     status: missed
   - id: plans_multiple
     status: missed
   - id: pricing_link
     status: missed
+  - id: terms_of_service
+    status: missed
+    detail: pointer liveness 0.0
+  - id: privacy_policy
+    status: missed
+    detail: pointer liveness 0.0
   - id: finops_mapped
     status: missed
   - id: compliance_published
@@ -110,6 +122,12 @@ kin_checks:
     status: missed
   - id: reg_vulnerability_disclosure
     status: missed
+  - id: reg_terms_of_service
+    status: missed
+    detail: pointer liveness 0.0
+  - id: reg_privacy_policy
+    status: missed
+    detail: pointer liveness 0.0
   - id: reg_compliance_published
     status: missed
   - id: upsert_outcome_discriminator
@@ -156,9 +174,17 @@ kin_checks:
   - id: conformance_declared
     status: partial
     earned: 1.5
+  - id: github_org_present
+    status: partial
+    earned: 1.0
+    detail: pointer liveness 0.5
   - id: agent_skill_present
     status: partial
     earned: 0.75
+  - id: sign_up_present
+    status: partial
+    earned: 2.5
+    detail: pointer liveness 0.5
   - id: auth_clarity
     status: partial
     earned: 3.5
