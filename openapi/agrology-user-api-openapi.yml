@@ -1,0 +1,32 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Agrology Public API v2 User API
+servers:
+- url: https://api.agrology.ag/v2
+tags:
+- name: User
+paths:
+  /access:
+    get:
+      security:
+      - publicApiAuthorizer: []
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: string
+      tags:
+      - User
+      summary: Get access
+      x-summary-source: derived
+      operationId: getAccess
+      x-operation-id-source: derived
+components:
+  securitySchemes:
+    publicApiAuthorizer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

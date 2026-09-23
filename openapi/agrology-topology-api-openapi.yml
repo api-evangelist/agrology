@@ -1,0 +1,112 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Agrology Public API v2 Topology API
+servers:
+- url: https://api.agrology.ag/v2
+tags:
+- name: Topology
+paths:
+  /sites:
+    get:
+      security:
+      - publicApiAuthorizer: []
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: string
+      tags:
+      - Topology
+      summary: Get sites
+      x-summary-source: derived
+      operationId: getSites
+      x-operation-id-source: derived
+  /nodes:
+    get:
+      security:
+      - publicApiAuthorizer: []
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: string
+      tags:
+      - Topology
+      summary: Get nodes
+      x-summary-source: derived
+      operationId: getNodes
+      x-operation-id-source: derived
+  /geojson/sites:
+    get:
+      security:
+      - publicApiAuthorizer: []
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: string
+      tags:
+      - Topology
+      summary: Get geojson sites
+      x-summary-source: derived
+      operationId: getGeojsonSites
+      x-operation-id-source: derived
+  /geojson/site/{siteID}:
+    get:
+      security:
+      - publicApiAuthorizer: []
+      parameters:
+      - name: siteID
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: string
+      tags:
+      - Topology
+      summary: Get geojson site by site id
+      x-summary-source: derived
+      operationId: getGeojsonSiteBySiteID
+      x-operation-id-source: derived
+  /geojson/customer/{customerID}:
+    get:
+      security:
+      - publicApiAuthorizer: []
+      parameters:
+      - name: customerID
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: string
+      tags:
+      - Topology
+      summary: Get geojson customer by customer id
+      x-summary-source: derived
+      operationId: getGeojsonCustomerByCustomerID
+      x-operation-id-source: derived
+components:
+  securitySchemes:
+    publicApiAuthorizer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

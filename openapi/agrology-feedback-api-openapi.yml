@@ -1,0 +1,74 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Agrology Public API v2 Feedback API
+servers:
+- url: https://api.agrology.ag/v2
+tags:
+- name: Feedback
+paths:
+  /feedback:
+    post:
+      summary: Submit Feedback to Agrology
+      security:
+      - publicApiAuthorizer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FeedbackSubmission'
+      responses:
+        '201':
+          description: 201 Created response
+          content:
+            application/json:
+              schema:
+                type: string
+      tags:
+      - Feedback
+      operationId: postFeedback
+      x-operation-id-source: derived
+components:
+  schemas:
+    FeedbackSubmission:
+      required:
+      - customer
+      - feedbackType
+      - remarks
+      - client
+      - clientVersion
+      properties:
+        customer:
+          type: string
+          description: the uuid of the active/selected customer in the client
+        client:
+          type: string
+          description: the name of the apg/client (e.g., Agrology iOS) from which the feedback is being sent
+        clientVersion:
+          type: string
+          description: the semantic version of the client from which the feedback is being sent
+        appLocation:
+          type: string
+          description: a URI or text description representing the location in the app where the feedback form was overlaid
+        feedbackType:
+          type: string
+          enum:
+          - feature
+          - bug
+          - other
+          description: the categorizable subject for the feedback
+        remarks:
+          type: string
+          description: the actual feedback entered by the user in freeform text
+        wantsFollowUp:
+          type: boolean
+          description: set to true if the user would like someone to contact them about their feedback
+        isTestMessage:
+          type: boolean
+          description: set to true if the feedback is a test submission that the customer success team can ignore
+  securitySchemes:
+    publicApiAuthorizer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

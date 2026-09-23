@@ -1,0 +1,996 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Agrology Public API v2 Experiments API
+servers:
+- url: https://api.agrology.ag/v2
+tags:
+- name: Experiments
+paths:
+  /experiments/{customerID}/{id}:
+    get:
+      summary: Get info about a specific Experiment
+      parameters:
+      - name: customerID
+        in: path
+        required: true
+        description: The CustomerID value of the Experiment to retrieve
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        description: The ID value of the Experiment to retrieve
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Experiment Object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Experiment'
+      security:
+      - publicApiAuthorizer: []
+      tags:
+      - Experiments
+      operationId: getExperimentsByCustomerIDById
+      x-operation-id-source: derived
+    put:
+      summary: Update a specific Experiment
+      parameters:
+      - name: customerID
+        in: path
+        required: true
+        description: The CustomerID value of the Experiment to update
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        description: The ID value of the Experiment to update
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: string
+      responses:
+        '200':
+          description: result of the updateExperiment operation
+          content:
+            application/json:
+              schema:
+                type: string
+      security:
+      - publicApiAuthorizer: []
+      tags:
+      - Experiments
+      operationId: putExperimentsByCustomerIDById
+      x-operation-id-source: derived
+    delete:
+      summary: Delete a specific Experiment
+      parameters:
+      - name: customerID
+        in: path
+        required: true
+        description: The CustomerID value of the Experiment to delete
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        description: The ID value of the Experiment to delete
+        schema:
+          type: string
+      responses:
+        '200':
+          description: result of the deleteExperiment operation
+          content:
+            application/json:
+              schema:
+                type: string
+      security:
+      - publicApiAuthorizer: []
+      tags:
+      - Experiments
+      operationId: deleteExperimentsByCustomerIDById
+      x-operation-id-source: derived
+  /experiments/customer/{customerID}:
+    get:
+      summary: Lists Experiments whose CustomerID matches the provided value
+      parameters:
+      - name: customerID
+        in: path
+        required: true
+        description: The CustomerID value used to filter the list
+        schema:
+          type: string
+      responses:
+        '200':
+          description: An array of Experiments
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Experiments'
+      security:
+      - publicApiAuthorizer: []
+      tags:
+      - Experiments
+      operationId: getExperimentsCustomerByCustomerID
+      x-operation-id-source: derived
+    post:
+      summary: Create a new Experiment
+      parameters:
+      - name: customerID
+        in: path
+        required: true
+        description: The CustomerID value of the new Experiment
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: string
+      responses:
+        '201':
+          description: result of the createExperiment operation
+          content:
+            application/json:
+              schema:
+                type: string
+      security:
+      - publicApiAuthorizer: []
+      tags:
+      - Experiments
+      operationId: postExperimentsCustomerByCustomerID
+      x-operation-id-source: derived
+  /experiments/groups/{customerID}/{experimentID}/{id}:
+    get:
+      summary: Get info about a specific ExperimentGroup
+      parameters:
+      - name: customerID
+        in: path
+        required: true
+        description: The CustomerID value of the ExperimentGroup to retrieve
+        schema:
+          type: string
+      - name: experimentID
+        in: path
+        required: true
+        description: The ExperimentID value of the ExperimentGroup to retrieve
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        description: The ID value of the ExperimentGroup to retrieve
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ExperimentGroup Object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExperimentGroup'
+      security:
+      - publicApiAuthorizer: []
+      tags:
+      - Experiments
+      operationId: getExperimentsGroupsByCustomerIDByExperimentIDById
+      x-operation-id-source: derived
+    put:
+      summary: Update a specific ExperimentGroup
+      parameters:
+      - name: customerID
+        in: path
+        required: true
+        description: The CustomerID value of the ExperimentGroup to update
+        schema:
+          type: string
+      - name: experimentID
+        in: path
+        required: true
+        description: The ExperimentID value of the ExperimentGroup to update
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        description: The ID value of the ExperimentGroup to update
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: string
+      responses:
+        '200':
+          description: result of the updateExperimentGroup operation
+          content:
+            application/json:
+              schema:
+                type: string
+      security:
+      - publicApiAuthorizer: []
+      tags:
+      - Experiments
+      operationId: putExperimentsGroupsByCustomerIDByExperimentIDById
+      x-operation-id-source: derived
+    delete:
+      summary: Delete a specific ExperimentGroup
+      parameters:
+      - name: customerID
+        in: path
+        required: true
+        description: The CustomerID value of the ExperimentGroup to delete
+        schema:
+          type: string
+      - name: experimentID
+        in: path
+        required: true
+        description: The ExperimentID value of the ExperimentGroup to delete
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        description: The ID value of the ExperimentGroup to delete
+        schema:
+          type: string
+      responses:
+        '200':
+          description: result of the deleteExperimentGroup operation
+          content:
+            application/json:
+              schema:
+                type: string
+      security:
+      - publicApiAuthorizer: []
+      tags:
+      - Experiments
+      operationId: deleteExperimentsGroupsByCustomerIDByExperimentIDById
+      x-operation-id-source: derived
+  /experiments/groups/{customerID}/{experimentID}:
+    get:
+      summary: Lists ExperimentGroups whose ExperimentID matches the provided value
+      parameters:
+      - name: customerID
+        in: path
+        required: true
+        description: The CustomerID value used to filter the list
+        schema:
+          type: string
+      - name: experimentID
+        in: path
+        required: true
+        description: The ExperimentID value used to filter the list
+        schema:
+          type: string
+      responses:
+        '200':
+          description: An array of ExperimentGroups
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExperimentGroups'
+      security:
+      - publicApiAuthorizer: []
+      tags:
+      - Experiments
+      operationId: getExperimentsGroupsByCustomerIDByExperimentID
+      x-operation-id-source: derived
+    post:
+      summary: Create a new ExperimentGroup
+      parameters:
+      - name: customerID
+        in: path
+        required: true
+        description: The CustomerID value of the new ExperimentGroup
+        schema:
+          type: string
+      - name: experimentID
+        in: path
+        required: true
+        description: The ExperimentID value of the new ExperimentGroup
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: string
+      responses:
+        '201':
+          description: result of the createExperimentGroup operation
+          content:
+            application/json:
+              schema:
+                type: string
+      security:
+      - publicApiAuthorizer: []
+      tags:
+      - Experiments
+      operationId: postExperimentsGroupsByCustomerIDByExperimentID
+      x-operation-id-source: derived
+  /experiments/members/{customerID}/{experimentID}/{groupID}/{nodeID}:
+    get:
+      summary: Get info about a specific ExperimentMember
+      parameters:
+      - name: customerID
+        in: path
+        required: true
+        description: The CustomerID value of the ExperimentMember to retrieve
+        schema:
+          type: string
+      - name: experimentID
+        in: path
+        required: true
+        description: The ExperimentID parameter
+        schema:
+          type: string
+      - name: groupID
+        in: path
+        required: true
+        description: The GroupID value of the ExperimentMember to retrieve
+        schema:
+          type: string
+      - name: nodeID
+        in: path
+        required: true
+        description: The NodeID value of the ExperimentMember to retrieve
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ExperimentMember Object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExperimentMember'
+      security:
+      - publicApiAuthorizer: []
+      tags:
+      - Experiments
+      operationId: getExperimentsMembersByCustomerIDByExperimentIDByGroupIDByNodeID
+      x-operation-id-source: derived
+    post:
+      summary: Create a new ExperimentMember
+      parameters:
+      - name: customerID
+        in: path
+        required: true
+        description: The CustomerID value of the new ExperimentMember
+        schema:
+          type: string
+      - name: experimentID
+        in: path
+        required: true
+        description: The ExperimentID parameter
+        schema:
+          type: string
+      - name: groupID
+        in: path
+        required: true
+        description: The GroupID value of the new ExperimentMember
+        schema:
+          type: string
+      - name: nodeID
+        in: path
+        required: true
+        description: The NodeID value of the new ExperimentMember
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: string
+      responses:
+        '201':
+          description: result of the createExperimentMember operation
+          content:
+            application/json:
+              schema:
+                type: string
+      security:
+      - publicApiAuthorizer: []
+      tags:
+      - Experiments
+      operationId: postExperimentsMembersByCustomerIDByExperimentIDByGroupIDByNodeID
+      x-operation-id-source: derived
+    put:
+      summary: Update a specific ExperimentMember
+      parameters:
+      - name: customerID
+        in: path
+        required: true
+        description: The CustomerID value of the ExperimentMember to update
+        schema:
+          type: string
+      - name: experimentID
+        in: path
+        required: true
+        description: The ExperimentID parameter
+        schema:
+          type: string
+      - name: groupID
+        in: path
+        required: true
+        description: The GroupID value of the ExperimentMember to update
+        schema:
+          type: string
+      - name: nodeID
+        in: path
+        required: true
+        description: The NodeID value of the ExperimentMember to update
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: string
+      responses:
+        '200':
+          description: result of the updateExperimentMember operation
+          content:
+            application/json:
+              schema:
+                type: string
+      security:
+      - publicApiAuthorizer: []
+      tags:
+      - Experiments
+      operationId: putExperimentsMembersByCustomerIDByExperimentIDByGroupIDByNodeID
+      x-operation-id-source: derived
+    delete:
+      summary: Delete a specific ExperimentMember
+      parameters:
+      - name: customerID
+        in: path
+        required: true
+        description: The CustomerID value of the ExperimentMember to delete
+        schema:
+          type: string
+      - name: experimentID
+        in: path
+        required: true
+        description: The ExperimentID parameter
+        schema:
+          type: string
+      - name: groupID
+        in: path
+        required: true
+        description: The GroupID value of the ExperimentMember to delete
+        schema:
+          type: string
+      - name: nodeID
+        in: path
+        required: true
+        description: The NodeID value of the ExperimentMember to delete
+        schema:
+          type: string
+      responses:
+        '200':
+          description: result of the deleteExperimentMember operation
+          content:
+            application/json:
+              schema:
+                type: string
+      security:
+      - publicApiAuthorizer: []
+      tags:
+      - Experiments
+      operationId: deleteExperimentsMembersByCustomerIDByExperimentIDByGroupIDByNodeID
+      x-operation-id-source: derived
+  /experiments/members/{customerID}/group-id/{groupID}:
+    get:
+      summary: Lists ExperimentMembers whose GroupID matches the provided value
+      parameters:
+      - name: customerID
+        in: path
+        required: true
+        description: The CustomerID value used to filter the list
+        schema:
+          type: string
+      - name: groupID
+        in: path
+        required: true
+        description: The GroupID value used to filter the list
+        schema:
+          type: string
+      responses:
+        '200':
+          description: An array of ExperimentMembers
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExperimentMembers'
+      security:
+      - publicApiAuthorizer: []
+      tags:
+      - Experiments
+      operationId: getExperimentsMembersByCustomerIDGroupIdByGroupID
+      x-operation-id-source: derived
+  /experiments/members/{customerID}/node-id/{nodeID}:
+    get:
+      summary: Lists ExperimentMembers whose NodeID matches the provided value
+      parameters:
+      - name: customerID
+        in: path
+        required: true
+        description: The CustomerID value used to filter the list
+        schema:
+          type: string
+      - name: nodeID
+        in: path
+        required: true
+        description: The NodeID value used to filter the list
+        schema:
+          type: string
+      responses:
+        '200':
+          description: An array of ExperimentMembers
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExperimentMembers'
+      security:
+      - publicApiAuthorizer: []
+      tags:
+      - Experiments
+      operationId: getExperimentsMembersByCustomerIDNodeIdByNodeID
+      x-operation-id-source: derived
+  /experiments/members/{customerID}/experiment-id/{experimentID}:
+    get:
+      summary: Lists ExperimentMembers whose ExperimentID matches the provided value
+      parameters:
+      - name: customerID
+        in: path
+        required: true
+        description: The customerID value used to filter the list
+        schema:
+          type: string
+      - name: experimentID
+        in: path
+        required: true
+        description: The ExperimentID value used to filter the list
+        schema:
+          type: string
+      responses:
+        '200':
+          description: An array of ExperimentMembers
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExperimentMembers'
+      security:
+      - publicApiAuthorizer: []
+      tags:
+      - Experiments
+      operationId: getExperimentsMembersByCustomerIDExperimentIdByExperimentID
+      x-operation-id-source: derived
+  /experiments/metrics/{customerID}/{experimentID}/{id}:
+    get:
+      summary: Get info about a specific ExperimentMetric
+      parameters:
+      - name: customerID
+        in: path
+        required: true
+        description: The customerID value of the ExperimentMetric to retrieve
+        schema:
+          type: string
+      - name: experimentID
+        in: path
+        required: true
+        description: The ExperimentID value of the ExperimentMetric to retrieve
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        description: The ID value of the ExperimentMetric to retrieve
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ExperimentMetric Object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExperimentMetric'
+      security:
+      - publicApiAuthorizer: []
+      tags:
+      - Experiments
+      operationId: getExperimentsMetricsByCustomerIDByExperimentIDById
+      x-operation-id-source: derived
+    put:
+      summary: Update a specific ExperimentMetric
+      parameters:
+      - name: customerID
+        in: path
+        required: true
+        description: The customerID value of the ExperimentMetric to update
+        schema:
+          type: string
+      - name: experimentID
+        in: path
+        required: true
+        description: The ExperimentID value of the ExperimentMetric to update
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        description: The ID value of the ExperimentMetric to update
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: string
+      responses:
+        '200':
+          description: result of the updateExperimentMetric operation
+          content:
+            application/json:
+              schema:
+                type: string
+      security:
+      - publicApiAuthorizer: []
+      tags:
+      - Experiments
+      operationId: putExperimentsMetricsByCustomerIDByExperimentIDById
+      x-operation-id-source: derived
+    delete:
+      summary: Delete a specific ExperimentMetric
+      parameters:
+      - name: customerID
+        in: path
+        required: true
+        description: The customerID value of the ExperimentMetric to delete
+        schema:
+          type: string
+      - name: experimentID
+        in: path
+        required: true
+        description: The ExperimentID value of the ExperimentMetric to delete
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        description: The ID value of the ExperimentMetric to delete
+        schema:
+          type: string
+      responses:
+        '200':
+          description: result of the deleteExperimentMetric operation
+          content:
+            application/json:
+              schema:
+                type: string
+      security:
+      - publicApiAuthorizer: []
+      tags:
+      - Experiments
+      operationId: deleteExperimentsMetricsByCustomerIDByExperimentIDById
+      x-operation-id-source: derived
+  /experiments/metrics/{customerID}/experiment-id/{experimentID}:
+    get:
+      summary: Lists ExperimentMetrics whose ExperimentID matches the provided value
+      parameters:
+      - name: customerID
+        in: path
+        required: true
+        description: The customerID value used to filter the list
+        schema:
+          type: string
+      - name: experimentID
+        in: path
+        required: true
+        description: The ExperimentID value used to filter the list
+        schema:
+          type: string
+      responses:
+        '200':
+          description: An array of ExperimentMetrics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExperimentMetrics'
+      security:
+      - publicApiAuthorizer: []
+      tags:
+      - Experiments
+      operationId: getExperimentsMetricsByCustomerIDExperimentIdByExperimentID
+      x-operation-id-source: derived
+    post:
+      summary: Create a new ExperimentMetric
+      parameters:
+      - name: customerID
+        in: path
+        required: true
+        description: The customerID value of the new ExperimentMetric
+        schema:
+          type: string
+      - name: experimentID
+        in: path
+        required: true
+        description: The ExperimentID value of the new ExperimentMetric
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: string
+      responses:
+        '201':
+          description: result of the createExperimentMetric operation
+          content:
+            application/json:
+              schema:
+                type: string
+      security:
+      - publicApiAuthorizer: []
+      tags:
+      - Experiments
+      operationId: postExperimentsMetricsByCustomerIDExperimentIdByExperimentID
+      x-operation-id-source: derived
+  /experiments/data/{customerID}/e/{experimentID}/{resolution}/{timeRange}:
+    get:
+      summary: Queries and returns Experiment time series data about this ExperimentID
+      parameters:
+      - name: customerID
+        in: path
+        required: true
+        description: The customerID value used to filter the data
+        schema:
+          type: string
+      - name: experimentID
+        in: path
+        required: true
+        description: The ExperimentID value used to filter the data
+        schema:
+          type: string
+      - name: resolution
+        in: path
+        required: true
+        description: The resolution value used to filter the data
+        schema:
+          type: string
+      - name: timeRange
+        in: path
+        required: true
+        description: The timeRange value used to filter the data
+        schema:
+          type: string
+      responses:
+        '200':
+          description: An array of ExperimentMetrics
+          content:
+            application/json:
+              schema:
+                type: string
+      security:
+      - publicApiAuthorizer: []
+      tags:
+      - Experiments
+      operationId: getExperimentsDataByCustomerIDEByExperimentIDByResolutionByTimeRange
+      x-operation-id-source: derived
+  /experiments/data/{customerID}/e/{experimentID}/g/{groupID}/{resolution}/{timeRange}:
+    get:
+      summary: Queries and returns Experiment time series data about this ExperimentID and…
+      parameters:
+      - name: customerID
+        in: path
+        required: true
+        description: The customerID value used to filter the data
+        schema:
+          type: string
+      - name: experimentID
+        in: path
+        required: true
+        description: The ExperimentID value used to filter the data
+        schema:
+          type: string
+      - name: groupID
+        in: path
+        required: true
+        description: The groupID value used to filter the data
+        schema:
+          type: string
+      - name: resolution
+        in: path
+        required: true
+        description: The resolution value used to filter the data
+        schema:
+          type: string
+      - name: timeRange
+        in: path
+        required: true
+        description: The timeRange value used to filter the data
+        schema:
+          type: string
+      responses:
+        '200':
+          description: An array of ExperimentMetrics
+          content:
+            application/json:
+              schema:
+                type: string
+      security:
+      - publicApiAuthorizer: []
+      tags:
+      - Experiments
+      operationId: getExperimentsDataByCustomerIDEByExperimentIDGByGroupIDByResolutionByTimeRange
+      x-operation-id-source: derived
+  /experiments/data/{customerID}/e/{experimentID}/run:
+    post:
+      summary: requests the experiment data be re-run
+      parameters:
+      - name: customerID
+        in: path
+        required: true
+        description: The customerID value used to identify the experiment
+        schema:
+          type: string
+      - name: experimentID
+        in: path
+        required: true
+        description: The ExperimentID value used to identify the experiment
+        schema:
+          type: string
+      responses:
+        '204':
+          description: 204 response
+          content: {}
+      security:
+      - publicApiAuthorizer: []
+      tags:
+      - Experiments
+      operationId: postExperimentsDataByCustomerIDEByExperimentIDRun
+      x-operation-id-source: derived
+  /experiments/data/{customerID}/e/{experimentID}/regenerate:
+    post:
+      summary: requests the experiment data be fully regenerated
+      parameters:
+      - name: customerID
+        in: path
+        required: true
+        description: The customerID value used to identify the experiment
+        schema:
+          type: string
+      - name: experimentID
+        in: path
+        required: true
+        description: The ExperimentID value used to identify the experiment
+        schema:
+          type: string
+      responses:
+        '204':
+          description: 204 response
+          content: {}
+      security:
+      - publicApiAuthorizer: []
+      tags:
+      - Experiments
+      operationId: postExperimentsDataByCustomerIDEByExperimentIDRegenerate
+      x-operation-id-source: derived
+components:
+  schemas:
+    ExperimentMember:
+      required:
+      - groupID
+      - nodeID
+      properties:
+        groupID:
+          type: string
+        nodeID:
+          type: string
+        experimentID:
+          type: string
+        color:
+          type: string
+    ExperimentMembers:
+      type: array
+      items:
+        $ref: '#/components/schemas/ExperimentMember'
+    ExperimentGroup:
+      required:
+      - experimentID
+      - id
+      properties:
+        experimentID:
+          type: string
+        id:
+          type: string
+        description:
+          type: string
+        groupType:
+          type: string
+        notes:
+          type: string
+        icon:
+          type: string
+        color:
+          type: string
+    ExperimentGroups:
+      type: array
+      items:
+        $ref: '#/components/schemas/ExperimentGroup'
+    ExperimentMetric:
+      required:
+      - experimentID
+      - id
+      properties:
+        experimentID:
+          type: string
+        id:
+          type: string
+        metricID:
+          type: string
+        statistic:
+          type: string
+        resolution:
+          type: integer
+          format: int64
+    Experiments:
+      type: array
+      items:
+        $ref: '#/components/schemas/Experiment'
+    ExperimentMetrics:
+      type: array
+      items:
+        $ref: '#/components/schemas/ExperimentMetric'
+    Experiment:
+      required:
+      - customerID
+      - id
+      properties:
+        customerID:
+          type: string
+        id:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+        notes:
+          type: string
+        startTime:
+          type: integer
+          format: int64
+        endTime:
+          type: integer
+          format: int64
+        notice:
+          type: string
+        noticeLevel:
+          type: string
+        noticeExpires:
+          type: number
+          format: int64
+        positionFilter:
+          type: string
+  securitySchemes:
+    publicApiAuthorizer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

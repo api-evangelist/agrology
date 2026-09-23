@@ -1,0 +1,38 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Agrology Public API v2 Alerts API
+servers:
+- url: https://api.agrology.ag/v2
+tags:
+- name: Alerts
+paths:
+  /alerts/customer/{customerID}:
+    get:
+      summary: Lists alerts for a given customer
+      tags:
+      - Alerts
+      parameters:
+      - name: customerID
+        in: path
+        required: true
+        description: The id of the Customer for which to retrieve alerts
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Expected response to a valid request
+          content:
+            application/json:
+              schema:
+                type: string
+      security:
+      - publicApiAuthorizer: []
+      operationId: getAlertsCustomerByCustomerID
+      x-operation-id-source: derived
+components:
+  securitySchemes:
+    publicApiAuthorizer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

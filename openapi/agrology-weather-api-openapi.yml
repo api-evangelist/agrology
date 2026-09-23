@@ -1,0 +1,188 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Agrology Public API v2 Weather API
+servers:
+- url: https://api.agrology.ag/v2
+tags:
+- name: Weather
+paths:
+  /historical/weather/{siteID}/{timeRange}:
+    get:
+      security:
+      - publicApiAuthorizer: []
+      parameters:
+      - name: siteID
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: timeRange
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: string
+      tags:
+      - Weather
+      summary: Get historical weather by site id by time range
+      x-summary-source: derived
+      operationId: getHistoricalWeatherBySiteIDByTimeRange
+      x-operation-id-source: derived
+  /historical/weather/{siteID}/node/{nodeID}/{timeRange}:
+    get:
+      security:
+      - publicApiAuthorizer: []
+      parameters:
+      - name: siteID
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: nodeID
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: timeRange
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: string
+      tags:
+      - Weather
+      summary: Get historical weather by site id node by node id by time range
+      x-summary-source: derived
+      operationId: getHistoricalWeatherBySiteIDNodeByNodeIDByTimeRange
+      x-operation-id-source: derived
+  /predictions/weather/{siteID}:
+    get:
+      security:
+      - publicApiAuthorizer: []
+      parameters:
+      - name: siteID
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: string
+      tags:
+      - Weather
+      summary: Get predictions weather by site id
+      x-summary-source: derived
+      operationId: getPredictionsWeatherBySiteID
+      x-operation-id-source: derived
+  /predictions/weather/{siteID}/node/{nodeID}:
+    get:
+      security:
+      - publicApiAuthorizer: []
+      parameters:
+      - name: siteID
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: nodeID
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: string
+      tags:
+      - Weather
+      summary: Get predictions weather by site id node by node id
+      x-summary-source: derived
+      operationId: getPredictionsWeatherBySiteIDNodeByNodeID
+      x-operation-id-source: derived
+  /predictions/weather/{siteID}/{timeRange}:
+    get:
+      security:
+      - publicApiAuthorizer: []
+      parameters:
+      - name: siteID
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: timeRange
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: string
+      tags:
+      - Weather
+      summary: Get predictions weather by site id by time range
+      x-summary-source: derived
+      operationId: getPredictionsWeatherBySiteIDByTimeRange
+      x-operation-id-source: derived
+  /predictions/weather/{siteID}/node/{nodeID}/{timeRange}:
+    get:
+      security:
+      - publicApiAuthorizer: []
+      parameters:
+      - name: siteID
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: nodeID
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: timeRange
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: string
+      tags:
+      - Weather
+      summary: Get predictions weather by site id node by node id by time range
+      x-summary-source: derived
+      operationId: getPredictionsWeatherBySiteIDNodeByNodeIDByTimeRange
+      x-operation-id-source: derived
+components:
+  securitySchemes:
+    publicApiAuthorizer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

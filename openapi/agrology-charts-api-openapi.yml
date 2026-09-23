@@ -1,0 +1,172 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Agrology Public API v2 Charts API
+servers:
+- url: https://api.agrology.ag/v2
+tags:
+- name: Charts
+paths:
+  /library-charts/{customerID}/{id}:
+    get:
+      summary: Get info about a specific LibraryChart
+      operationId: showLibraryChart
+      parameters:
+      - name: customerID
+        in: path
+        required: true
+        description: The CustomerID value of the LibraryChart to retrieve
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        description: The ID value of the LibraryChart to retrieve
+        schema:
+          type: string
+      responses:
+        '200':
+          description: LibraryChart Object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LibraryChart'
+      security:
+      - publicApiAuthorizer: []
+      tags:
+      - Charts
+    put:
+      summary: Update a specific LibraryChart
+      operationId: updateLibraryChart
+      parameters:
+      - name: customerID
+        in: path
+        required: true
+        description: The CustomerID value of the LibraryChart to update
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        description: The ID value of the LibraryChart to update
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: string
+      responses:
+        '200':
+          description: result of the updateLibraryChart operation
+          content:
+            application/json:
+              schema:
+                type: string
+      security:
+      - publicApiAuthorizer: []
+      tags:
+      - Charts
+    delete:
+      summary: Delete a specific LibraryChart
+      operationId: deleteLibraryChart
+      parameters:
+      - name: customerID
+        in: path
+        required: true
+        description: The CustomerID value of the LibraryChart to delete
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        description: The ID value of the LibraryChart to delete
+        schema:
+          type: string
+      responses:
+        '200':
+          description: result of the deleteLibraryChart operation
+          content:
+            application/json:
+              schema:
+                type: string
+      security:
+      - publicApiAuthorizer: []
+      tags:
+      - Charts
+  /library-charts/customer/{customerID}:
+    get:
+      summary: Lists LibraryCharts whose CustomerID matches the provided value
+      operationId: listLibraryChartsByCustomerID
+      parameters:
+      - name: customerID
+        in: path
+        required: true
+        description: The CustomerID value used to filter the list
+        schema:
+          type: string
+      responses:
+        '200':
+          description: An array of LibraryCharts
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LibraryCharts'
+      security:
+      - publicApiAuthorizer: []
+      tags:
+      - Charts
+    post:
+      summary: Create a new LibraryChart
+      operationId: createLibraryChart
+      parameters:
+      - name: customerID
+        in: path
+        required: true
+        description: The CustomerID value used to filter the list
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: string
+      responses:
+        '201':
+          description: result of the createLibraryChart operation
+          content:
+            application/json:
+              schema:
+                type: string
+      security:
+      - publicApiAuthorizer: []
+      tags:
+      - Charts
+components:
+  schemas:
+    LibraryCharts:
+      type: array
+      items:
+        $ref: '#/components/schemas/LibraryChart'
+    LibraryChart:
+      required:
+      - customerID
+      - id
+      properties:
+        id:
+          type: string
+        customerID:
+          type: string
+        description:
+          type: string
+        folder:
+          type: string
+        definition:
+          type: string
+  securitySchemes:
+    publicApiAuthorizer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

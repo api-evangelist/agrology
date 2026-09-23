@@ -1,0 +1,290 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Agrology Public API v2 Reports API
+servers:
+- url: https://api.agrology.ag/v2
+tags:
+- name: Reports
+paths:
+  /report-definitions/{customerID}/{id}:
+    put:
+      summary: Update a specific ReportDefinition
+      parameters:
+      - name: customerID
+        in: path
+        required: true
+        description: The CustomerID value of the ReportDefinition to update
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        description: The ID value of the ReportDefinition to update
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: string
+      security:
+      - publicApiAuthorizer: []
+      responses:
+        '200':
+          description: result of the updateReportDefinition operation
+          content:
+            application/json:
+              schema:
+                type: string
+      tags:
+      - Reports
+      operationId: putReportDefinitionsByCustomerIDById
+      x-operation-id-source: derived
+    delete:
+      summary: Delete a specific ReportDefinition
+      parameters:
+      - name: customerID
+        in: path
+        required: true
+        description: The CustomerID value of the ReportDefinition to delete
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        description: The ID value of the ReportDefinition to delete
+        schema:
+          type: string
+      responses:
+        '200':
+          description: result of the deleteReportDefinition operation
+          content:
+            application/json:
+              schema:
+                type: string
+      security:
+      - publicApiAuthorizer: []
+      tags:
+      - Reports
+      operationId: deleteReportDefinitionsByCustomerIDById
+      x-operation-id-source: derived
+  /report-definitions/customer/{customerID}:
+    get:
+      summary: Lists ReportDefinitions whose CustomerID matches the provided value
+      parameters:
+      - name: customerID
+        in: path
+        required: true
+        description: The CustomerID value used to filter the list
+        schema:
+          type: string
+      responses:
+        '200':
+          description: An array of ReportDefinitions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportDefinitions'
+      security:
+      - publicApiAuthorizer: []
+      tags:
+      - Reports
+      operationId: getReportDefinitionsCustomerByCustomerID
+      x-operation-id-source: derived
+    post:
+      summary: Create a new ReportDefinition
+      parameters:
+      - name: customerID
+        in: path
+        required: true
+        description: The CustomerID value used to filter the list
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: string
+      responses:
+        '201':
+          description: result of the createReportDefinition operation
+          content:
+            application/json:
+              schema:
+                type: string
+      security:
+      - publicApiAuthorizer: []
+      tags:
+      - Reports
+      operationId: postReportDefinitionsCustomerByCustomerID
+      x-operation-id-source: derived
+  /report-runs/{customerID}/{id}:
+    get:
+      summary: Get info about a specific ReportRun
+      parameters:
+      - name: customerID
+        in: path
+        required: true
+        description: The CustomerID value of the ReportRun to retrieve
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        description: The ID value of the ReportRun to retrieve
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ReportRun Object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportRun'
+      security:
+      - publicApiAuthorizer: []
+      tags:
+      - Reports
+      operationId: getReportRunsByCustomerIDById
+      x-operation-id-source: derived
+  /report-runs/customer/{customerID}:
+    get:
+      summary: Lists ReportRuns whose CustomerID matches the provided value
+      parameters:
+      - name: customerID
+        in: path
+        required: true
+        description: The CustomerID value used to filter the list
+        schema:
+          type: string
+      responses:
+        '200':
+          description: An array of ReportRuns
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportRuns'
+      security:
+      - publicApiAuthorizer: []
+      tags:
+      - Reports
+      operationId: getReportRunsCustomerByCustomerID
+      x-operation-id-source: derived
+    post:
+      summary: Create a new ReportRun
+      parameters:
+      - name: customerID
+        in: path
+        required: true
+        description: The CustomerID value used to filter the list
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: string
+      responses:
+        '201':
+          description: result of the createReportRun operation
+          content:
+            application/json:
+              schema:
+                type: string
+      security:
+      - publicApiAuthorizer: []
+      tags:
+      - Reports
+      operationId: postReportRunsCustomerByCustomerID
+      x-operation-id-source: derived
+  /report-runs/report-definition-id/{customerID}/{reportDefinitionID}:
+    get:
+      summary: Lists ReportRuns whose ReportDefinitionID matches the provided value
+      parameters:
+      - name: customerID
+        in: path
+        required: true
+        description: The CustomerID value used to filter the list
+        schema:
+          type: string
+      - name: reportDefinitionID
+        in: path
+        required: true
+        description: The ReportDefinitionID value used to filter the list
+        schema:
+          type: string
+      responses:
+        '200':
+          description: An array of ReportRuns
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportRuns'
+      security:
+      - publicApiAuthorizer: []
+      tags:
+      - Reports
+      operationId: getReportRunsReportDefinitionIdByCustomerIDByReportDefinitionID
+      x-operation-id-source: derived
+components:
+  schemas:
+    ReportRuns:
+      type: array
+      items:
+        $ref: '#/components/schemas/ReportRun'
+    ReportRun:
+      required:
+      - customerID
+      - id
+      properties:
+        customerID:
+          type: string
+        id:
+          type: string
+        ts:
+          type: integer
+          format: int64
+        status:
+          type: string
+        reportDefinitionID:
+          type: string
+        executionTime:
+          type: integer
+          format: int64
+    ReportDefinition:
+      required:
+      - customerID
+      - id
+      properties:
+        id:
+          type: string
+        customerID:
+          type: string
+        aggregate:
+          type: string
+        entryType:
+          type: string
+        eventBridgeArn:
+          type: string
+        offsetSecs:
+          type: integer
+          format: int64
+        scope:
+          type: string
+        targetID:
+          type: string
+        templateID:
+          type: string
+    ReportDefinitions:
+      type: array
+      items:
+        $ref: '#/components/schemas/ReportDefinition'
+  securitySchemes:
+    publicApiAuthorizer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

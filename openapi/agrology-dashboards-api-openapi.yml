@@ -1,0 +1,526 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Agrology Public API v2 Dashboards API
+servers:
+- url: https://api.agrology.ag/v2
+tags:
+- name: Dashboards
+paths:
+  /dashboards/{owner}/{id}:
+    get:
+      summary: Get info about a specific Dashboard
+      parameters:
+      - name: owner
+        in: path
+        required: true
+        description: The Owner value of the Dashboard to retrieve
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        description: The ID value of the Dashboard to retrieve
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Dashboard Object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dashboard'
+      security:
+      - publicApiAuthorizer: []
+      tags:
+      - Dashboards
+      operationId: getDashboardsByOwnerById
+      x-operation-id-source: derived
+    put:
+      summary: Update a specific Dashboard
+      parameters:
+      - name: owner
+        in: path
+        required: true
+        description: The Owner value of the Dashboard to update
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        description: The ID value of the Dashboard to update
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: string
+      responses:
+        '200':
+          description: result of the updateDashboard operation
+          content:
+            application/json:
+              schema:
+                type: string
+      security:
+      - publicApiAuthorizer: []
+      tags:
+      - Dashboards
+      operationId: putDashboardsByOwnerById
+      x-operation-id-source: derived
+    delete:
+      summary: Delete a specific Dashboard
+      parameters:
+      - name: owner
+        in: path
+        required: true
+        description: The Owner value of the Dashboard to delete
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        description: The ID value of the Dashboard to delete
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+          content: {}
+      security:
+      - publicApiAuthorizer: []
+      tags:
+      - Dashboards
+      operationId: deleteDashboardsByOwnerById
+      x-operation-id-source: derived
+    post:
+      summary: Undelete a specific Dashboard
+      parameters:
+      - name: owner
+        in: path
+        required: true
+        description: The Owner value of the Dashboard to delete
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        description: The ID value of the Dashboard to delete
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+          content: {}
+      security:
+      - publicApiAuthorizer: []
+      tags:
+      - Dashboards
+      operationId: postDashboardsByOwnerById
+      x-operation-id-source: derived
+  /dashboards/owner/{owner}:
+    get:
+      summary: Lists Dashboards whose Owner matches the provided value
+      parameters:
+      - name: owner
+        in: path
+        required: true
+        description: The Owner value used to filter the list
+        schema:
+          type: string
+      responses:
+        '200':
+          description: An array of Dashboards
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dashboards'
+      security:
+      - publicApiAuthorizer: []
+      tags:
+      - Dashboards
+      operationId: getDashboardsOwnerByOwner
+      x-operation-id-source: derived
+    post:
+      summary: Create a new Dashboard
+      parameters:
+      - name: owner
+        in: path
+        required: true
+        description: The Owner value of the new Dashboard
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: string
+      responses:
+        '201':
+          description: result of the createDashboard operation
+          content:
+            application/json:
+              schema:
+                type: string
+      security:
+      - publicApiAuthorizer: []
+      tags:
+      - Dashboards
+      operationId: postDashboardsOwnerByOwner
+      x-operation-id-source: derived
+  /dashboards/owner/{owner}/feature-id/{featureID}:
+    get:
+      summary: Lists Dashboards whose owner and FeatureID matches the provided value
+      parameters:
+      - name: owner
+        in: path
+        required: true
+        description: The Owner value used to filter the list
+        schema:
+          type: string
+      - name: featureID
+        in: path
+        required: true
+        description: The FeatureID value used to filter the list
+        schema:
+          type: string
+      responses:
+        '200':
+          description: An array of Dashboards
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dashboards'
+      security:
+      - publicApiAuthorizer: []
+      tags:
+      - Dashboards
+      operationId: getDashboardsOwnerByOwnerFeatureIdByFeatureID
+      x-operation-id-source: derived
+  /access/manage/{customerID}:
+    get:
+      summary: Lists users with access to this customer
+      parameters:
+      - name: customerID
+        in: path
+        required: true
+        description: The customerID value used to filter the list
+        schema:
+          type: string
+      responses:
+        '200':
+          description: An array of Customer Access
+          content:
+            application/json:
+              schema:
+                type: string
+      security:
+      - publicApiAuthorizer: []
+      tags:
+      - Dashboards
+      operationId: getAccessManageByCustomerID
+      x-operation-id-source: derived
+  /access/manage/{customerID}/{accessUser}/{accessLevel}:
+    post:
+      summary: grants access to accessUser for customerID
+      parameters:
+      - name: customerID
+        in: path
+        required: true
+        description: The customerID where access is being updated
+        schema:
+          type: string
+      - name: accessUser
+        in: path
+        required: true
+        description: The email address of the user whose access is being updated
+        schema:
+          type: string
+      - name: accessLevel
+        in: path
+        required: true
+        description: The level of access being set for the accessUser subject
+        schema:
+          type: string
+      responses:
+        '201':
+          description: A 'Created' response with no content
+          content: {}
+      security:
+      - publicApiAuthorizer: []
+      tags:
+      - Dashboards
+      operationId: postAccessManageByCustomerIDByAccessUserByAccessLevel
+      x-operation-id-source: derived
+  /access/manage/{customerID}/{accessUser}:
+    delete:
+      summary: removes user access from this customerID
+      parameters:
+      - name: customerID
+        in: path
+        required: true
+        description: The customerID where access is being removed
+        schema:
+          type: string
+      - name: accessUser
+        in: path
+        required: true
+        description: The email address of the user whose access is being removed
+        schema:
+          type: string
+      responses:
+        '204':
+          description: A 'No Content' response
+          content: {}
+      security:
+      - publicApiAuthorizer: []
+      tags:
+      - Dashboards
+      operationId: deleteAccessManageByCustomerIDByAccessUser
+      x-operation-id-source: derived
+  /customer-inputs/{customerID}/{id}:
+    put:
+      summary: Update a specific CustomerInput
+      parameters:
+      - name: customerID
+        in: path
+        required: true
+        description: The CustomerID value of the CustomerInput to update
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        description: The ID value of the CustomerInput to update
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: string
+      responses:
+        '200':
+          description: result of the updateCustomerInput operation
+          content:
+            application/json:
+              schema:
+                type: string
+      security:
+      - publicApiAuthorizer: []
+      tags:
+      - Dashboards
+      operationId: putCustomerInputsByCustomerIDById
+      x-operation-id-source: derived
+    delete:
+      summary: Delete a specific CustomerInput
+      parameters:
+      - name: customerID
+        in: path
+        required: true
+        description: The CustomerID value of the CustomerInput to delete
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        description: The ID value of the CustomerInput to delete
+        schema:
+          type: string
+      responses:
+        '200':
+          description: result of the deleteCustomerInput operation
+          content:
+            application/json:
+              schema:
+                type: string
+      security:
+      - publicApiAuthorizer: []
+      tags:
+      - Dashboards
+      operationId: deleteCustomerInputsByCustomerIDById
+      x-operation-id-source: derived
+  /customer-inputs/customer/{customerID}:
+    get:
+      summary: Lists CustomerInputs whose CustomerID matches the provided value
+      parameters:
+      - name: customerID
+        in: path
+        required: true
+        description: The CustomerID value used to filter the list
+        schema:
+          type: string
+      responses:
+        '200':
+          description: An array of CustomerInputs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerInputs'
+      security:
+      - publicApiAuthorizer: []
+      tags:
+      - Dashboards
+      operationId: getCustomerInputsCustomerByCustomerID
+      x-operation-id-source: derived
+    post:
+      summary: Create a new CustomerInput
+      parameters:
+      - name: customerID
+        in: path
+        required: true
+        description: The CustomerID value of the new CustomerInput
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: string
+      responses:
+        '201':
+          description: result of the createCustomerInput operation
+          content:
+            application/json:
+              schema:
+                type: string
+      security:
+      - publicApiAuthorizer: []
+      tags:
+      - Dashboards
+      operationId: postCustomerInputsCustomerByCustomerID
+      x-operation-id-source: derived
+  /customer-inputs/customer/{customerID}/category/{category}:
+    get:
+      summary: Lists CustomerInputs whose CustomerID and Category match the provided values
+      parameters:
+      - name: customerID
+        in: path
+        required: true
+        description: The CustomerID value used to filter the list
+        schema:
+          type: string
+      - name: category
+        in: path
+        required: true
+        description: The Category value used to filter the list
+        schema:
+          type: string
+      responses:
+        '200':
+          description: An array of CustomerInputs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerInputs'
+      security:
+      - publicApiAuthorizer: []
+      tags:
+      - Dashboards
+      operationId: getCustomerInputsCustomerByCustomerIDCategoryByCategory
+      x-operation-id-source: derived
+  /customer-inputs/categories:
+    get:
+      summary: Lists available categories for customer inputs
+      responses:
+        '200':
+          description: An array of CustomerInputs
+          content:
+            application/json:
+              schema:
+                type: string
+      security:
+      - publicApiAuthorizer: []
+      tags:
+      - Dashboards
+      operationId: getCustomerInputsCategories
+      x-operation-id-source: derived
+components:
+  schemas:
+    Dashboards:
+      type: array
+      items:
+        $ref: '#/components/schemas/Dashboard'
+    CustomerInputs:
+      type: array
+      items:
+        $ref: '#/components/schemas/CustomerInput'
+    CustomerInput:
+      required:
+      - customerID
+      - id
+      properties:
+        customerID:
+          type: string
+        id:
+          type: string
+        category:
+          type: string
+    Dashboard:
+      required:
+      - owner
+      - id
+      properties:
+        id:
+          type: string
+        owner:
+          type: string
+        feature:
+          type: string
+        featureID:
+          type: string
+        description:
+          type: string
+        notes:
+          type: string
+        notice:
+          type: string
+          description: is a temporary, meaningful message the user should see about this dashboard
+        noticeLevel:
+          type: string
+          description: indicates optional severity of either info, warning, error, success
+        status:
+          type: string
+        order:
+          type: integer
+          format: int64
+        dataField0:
+          type: string
+          description: Data for Live Dashboard version
+        dataField1:
+          type: string
+          description: Data for Dashboard Rollback Version 1
+        dataField2:
+          type: string
+          description: Data for Dashboard Rollback Version 2
+        dataField3:
+          type: string
+          description: Data for Dashboard Rollback Version 3
+        dataField4:
+          type: string
+          description: Data for Dashboard Rollback Version 4
+        dataField5:
+          type: string
+          description: Data for Dashboard Rollback Version 5
+        dataField6:
+          type: string
+          description: Data for Dashboard Rollback Version 6
+        dataField7:
+          type: string
+          description: Data for Dashboard Rollback Version 7
+        dataField8:
+          type: string
+          description: Data for Dashboard Rollback Version 8
+        dataField9:
+          type: string
+          description: Data for Dashboard Rollback Version 9
+  securitySchemes:
+    publicApiAuthorizer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

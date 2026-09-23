@@ -1,0 +1,117 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Agrology Public API v2 Metrics API
+servers:
+- url: https://api.agrology.ag/v2
+tags:
+- name: Metrics
+paths:
+  /metrics:
+    get:
+      security:
+      - publicApiAuthorizer: []
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: string
+      tags:
+      - Metrics
+      summary: Get metrics
+      x-summary-source: derived
+      operationId: getMetrics
+      x-operation-id-source: derived
+  /historical/ground-truth/metrics:
+    get:
+      security:
+      - publicApiAuthorizer: []
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: string
+      tags:
+      - Metrics
+      summary: Get historical ground truth metrics
+      x-summary-source: derived
+      operationId: getHistoricalGroundTruthMetrics
+      x-operation-id-source: derived
+  /historical/weather/metrics:
+    get:
+      security:
+      - publicApiAuthorizer: []
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: string
+      tags:
+      - Metrics
+      summary: Get historical weather metrics
+      x-summary-source: derived
+      operationId: getHistoricalWeatherMetrics
+      x-operation-id-source: derived
+  /predictions/weather/metrics:
+    get:
+      security:
+      - publicApiAuthorizer: []
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: string
+      tags:
+      - Metrics
+      summary: Get predictions weather metrics
+      x-summary-source: derived
+      operationId: getPredictionsWeatherMetrics
+      x-operation-id-source: derived
+  /predictions/microclimate/metrics:
+    get:
+      security:
+      - publicApiAuthorizer: []
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: string
+      tags:
+      - Metrics
+      summary: Get predictions microclimate metrics
+      x-summary-source: derived
+      operationId: getPredictionsMicroclimateMetrics
+      x-operation-id-source: derived
+  /synthetics/microclimate/metrics:
+    get:
+      security:
+      - publicApiAuthorizer: []
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: string
+      tags:
+      - Metrics
+      summary: Get synthetics microclimate metrics
+      x-summary-source: derived
+      operationId: getSyntheticsMicroclimateMetrics
+      x-operation-id-source: derived
+components:
+  securitySchemes:
+    publicApiAuthorizer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

@@ -1,0 +1,143 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Agrology Public API v2 Files API
+servers:
+- url: https://api.agrology.ag/v2
+tags:
+- name: Files
+paths:
+  /fileserver/site/{siteID}:
+    get:
+      security:
+      - publicApiAuthorizer: []
+      parameters:
+      - name: siteID
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: file
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: redirect
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PreSignedURLResponse'
+      tags:
+      - Files
+      summary: Get fileserver site by site id
+      x-summary-source: derived
+      operationId: getFileserverSiteBySiteID
+      x-operation-id-source: derived
+  /fileserver/customer/{customerID}:
+    get:
+      security:
+      - publicApiAuthorizer: []
+      parameters:
+      - name: customerID
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: file
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: redirect
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PreSignedURLResponse'
+      tags:
+      - Files
+      summary: Get fileserver customer by customer id
+      x-summary-source: derived
+      operationId: getFileserverCustomerByCustomerID
+      x-operation-id-source: derived
+  /fileserver/customer/{customerID}/shared:
+    get:
+      security:
+      - publicApiAuthorizer: []
+      parameters:
+      - name: customerID
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of Customer Files Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerFiles'
+      tags:
+      - Files
+      summary: Get fileserver customer by customer id shared
+      x-summary-source: derived
+      operationId: getFileserverCustomerByCustomerIDShared
+      x-operation-id-source: derived
+components:
+  schemas:
+    CustomerFiles:
+      type: array
+      items:
+        $ref: '#/components/schemas/CustomerFile'
+    CustomerFile:
+      properties:
+        customerID:
+          type: string
+        id:
+          type: string
+        description:
+          type: string
+        filename:
+          type: string
+        s3URL:
+          type: string
+    PreSignedURLResponse:
+      type: object
+      required:
+      - url
+      - file
+      properties:
+        uploadUrl:
+          type: string
+          format: uri
+          description: 'Presigned PUT URL for uploading the file to S3, including query parameters (e.g. X-Amz-Algorithm, X-Amz-Signature).
+
+            '
+          example: https://agdata-example-bucket-abcd1234.s3.us-east-1.amazonaws.com/uploads/customer/portal/1781702810/filename.csv?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=...
+        url:
+          type: string
+          format: uri
+          description: 'Canonical S3 object URL with optional query parameters for pre-signed GET
+
+            '
+          example: https://agdata-example-bucket-abcd1234.s3.us-east-1.amazonaws.com/uploads/customer/portal/1781702810/filename.csv
+        file:
+          type: string
+          description: Base filename of the object key (final path segment).
+          example: filename.csv
+  securitySchemes:
+    publicApiAuthorizer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
