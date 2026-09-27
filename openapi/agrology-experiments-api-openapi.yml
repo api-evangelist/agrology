@@ -912,29 +912,6 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/ExperimentMember'
-    ExperimentGroup:
-      required:
-      - experimentID
-      - id
-      properties:
-        experimentID:
-          type: string
-        id:
-          type: string
-        description:
-          type: string
-        groupType:
-          type: string
-        notes:
-          type: string
-        icon:
-          type: string
-        color:
-          type: string
-    ExperimentGroups:
-      type: array
-      items:
-        $ref: '#/components/schemas/ExperimentGroup'
     ExperimentMetric:
       required:
       - experimentID
@@ -959,6 +936,29 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/ExperimentMetric'
+    ExperimentGroup:
+      required:
+      - experimentID
+      - id
+      properties:
+        experimentID:
+          type: string
+        id:
+          type: string
+        description:
+          type: string
+        groupType:
+          type: string
+        notes:
+          type: string
+        icon:
+          type: string
+        color:
+          type: string
+    ExperimentGroups:
+      type: array
+      items:
+        $ref: '#/components/schemas/ExperimentGroup'
     Experiment:
       required:
       - customerID

@@ -146,10 +146,6 @@ paths:
       - Charts
 components:
   schemas:
-    LibraryCharts:
-      type: array
-      items:
-        $ref: '#/components/schemas/LibraryChart'
     LibraryChart:
       required:
       - customerID
@@ -165,6 +161,10 @@ components:
           type: string
         definition:
           type: string
+    LibraryCharts:
+      type: array
+      items:
+        $ref: '#/components/schemas/LibraryChart'
   securitySchemes:
     publicApiAuthorizer:
       type: http

@@ -11,6 +11,22 @@ description: 'Agrology is a Delaware Public Benefit Corporation building a predi
   from its own GitHub organization, covering site and node topology, GeoJSON geometry,
   historical ground-truth and weather data, microclimate and weather predictions, alerts,
   reports, dashboards, charts and field experiments.'
+deliveryModel:
+  model: saas
+  license_evidence:
+    not_product:
+    - agrology/public-api-docs
+  open_source: unknown
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: low
+  source:
+  - openapi
+  - pricing
+  - repository-not-product
+  generated: '2026-09-25'
+  method: derived
 image: https://avatars.githubusercontent.com/u/55110899?v=4
 url: https://raw.githubusercontent.com/api-evangelist/agrology/refs/heads/main/apis.yml
 x-type: company
@@ -32,7 +48,7 @@ tags:
 - Predictive Analytics
 - Geospatial
 - Time Series
-- Machine-Learning
+- Machine Learning
 - Viticulture
 - Sustainability
 - Environmental Monitoring
@@ -53,6 +69,7 @@ tags_raw:
 - Viticulture
 - Sustainability
 - Environmental Monitoring
+- Machine-Learning
 apis:
 - aid: agrology:agrology-alerts-api
   name: Agrology Alerts API

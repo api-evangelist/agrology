@@ -255,6 +255,10 @@ components:
         executionTime:
           type: integer
           format: int64
+    ReportDefinitions:
+      type: array
+      items:
+        $ref: '#/components/schemas/ReportDefinition'
     ReportDefinition:
       required:
       - customerID
@@ -279,10 +283,6 @@ components:
           type: string
         templateID:
           type: string
-    ReportDefinitions:
-      type: array
-      items:
-        $ref: '#/components/schemas/ReportDefinition'
   securitySchemes:
     publicApiAuthorizer:
       type: http
