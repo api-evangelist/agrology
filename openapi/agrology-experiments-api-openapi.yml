@@ -895,70 +895,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    ExperimentMember:
-      required:
-      - groupID
-      - nodeID
-      properties:
-        groupID:
-          type: string
-        nodeID:
-          type: string
-        experimentID:
-          type: string
-        color:
-          type: string
-    ExperimentMembers:
-      type: array
-      items:
-        $ref: '#/components/schemas/ExperimentMember'
-    ExperimentMetric:
-      required:
-      - experimentID
-      - id
-      properties:
-        experimentID:
-          type: string
-        id:
-          type: string
-        metricID:
-          type: string
-        statistic:
-          type: string
-        resolution:
-          type: integer
-          format: int64
-    Experiments:
-      type: array
-      items:
-        $ref: '#/components/schemas/Experiment'
-    ExperimentMetrics:
-      type: array
-      items:
-        $ref: '#/components/schemas/ExperimentMetric'
-    ExperimentGroup:
-      required:
-      - experimentID
-      - id
-      properties:
-        experimentID:
-          type: string
-        id:
-          type: string
-        description:
-          type: string
-        groupType:
-          type: string
-        notes:
-          type: string
-        icon:
-          type: string
-        color:
-          type: string
-    ExperimentGroups:
-      type: array
-      items:
-        $ref: '#/components/schemas/ExperimentGroup'
     Experiment:
       required:
       - customerID
@@ -989,6 +925,70 @@ components:
           format: int64
         positionFilter:
           type: string
+    ExperimentMetrics:
+      type: array
+      items:
+        $ref: '#/components/schemas/ExperimentMetric'
+    ExperimentMember:
+      required:
+      - groupID
+      - nodeID
+      properties:
+        groupID:
+          type: string
+        nodeID:
+          type: string
+        experimentID:
+          type: string
+        color:
+          type: string
+    Experiments:
+      type: array
+      items:
+        $ref: '#/components/schemas/Experiment'
+    ExperimentGroup:
+      required:
+      - experimentID
+      - id
+      properties:
+        experimentID:
+          type: string
+        id:
+          type: string
+        description:
+          type: string
+        groupType:
+          type: string
+        notes:
+          type: string
+        icon:
+          type: string
+        color:
+          type: string
+    ExperimentMetric:
+      required:
+      - experimentID
+      - id
+      properties:
+        experimentID:
+          type: string
+        id:
+          type: string
+        metricID:
+          type: string
+        statistic:
+          type: string
+        resolution:
+          type: integer
+          format: int64
+    ExperimentMembers:
+      type: array
+      items:
+        $ref: '#/components/schemas/ExperimentMember'
+    ExperimentGroups:
+      type: array
+      items:
+        $ref: '#/components/schemas/ExperimentGroup'
   securitySchemes:
     publicApiAuthorizer:
       type: http

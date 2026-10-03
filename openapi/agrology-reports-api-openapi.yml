@@ -232,10 +232,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    ReportRuns:
-      type: array
-      items:
-        $ref: '#/components/schemas/ReportRun'
     ReportRun:
       required:
       - customerID
@@ -259,6 +255,10 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/ReportDefinition'
+    ReportRuns:
+      type: array
+      items:
+        $ref: '#/components/schemas/ReportRun'
     ReportDefinition:
       required:
       - customerID
