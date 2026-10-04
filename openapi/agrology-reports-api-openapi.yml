@@ -232,33 +232,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    ReportRun:
-      required:
-      - customerID
-      - id
-      properties:
-        customerID:
-          type: string
-        id:
-          type: string
-        ts:
-          type: integer
-          format: int64
-        status:
-          type: string
-        reportDefinitionID:
-          type: string
-        executionTime:
-          type: integer
-          format: int64
-    ReportDefinitions:
-      type: array
-      items:
-        $ref: '#/components/schemas/ReportDefinition'
-    ReportRuns:
-      type: array
-      items:
-        $ref: '#/components/schemas/ReportRun'
     ReportDefinition:
       required:
       - customerID
@@ -283,6 +256,33 @@ components:
           type: string
         templateID:
           type: string
+    ReportRuns:
+      type: array
+      items:
+        $ref: '#/components/schemas/ReportRun'
+    ReportRun:
+      required:
+      - customerID
+      - id
+      properties:
+        customerID:
+          type: string
+        id:
+          type: string
+        ts:
+          type: integer
+          format: int64
+        status:
+          type: string
+        reportDefinitionID:
+          type: string
+        executionTime:
+          type: integer
+          format: int64
+    ReportDefinitions:
+      type: array
+      items:
+        $ref: '#/components/schemas/ReportDefinition'
   securitySchemes:
     publicApiAuthorizer:
       type: http

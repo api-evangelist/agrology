@@ -96,22 +96,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    CustomerFiles:
-      type: array
-      items:
-        $ref: '#/components/schemas/CustomerFile'
-    CustomerFile:
-      properties:
-        customerID:
-          type: string
-        id:
-          type: string
-        description:
-          type: string
-        filename:
-          type: string
-        s3URL:
-          type: string
     PreSignedURLResponse:
       type: object
       required:
@@ -136,6 +120,22 @@ components:
           type: string
           description: Base filename of the object key (final path segment).
           example: filename.csv
+    CustomerFile:
+      properties:
+        customerID:
+          type: string
+        id:
+          type: string
+        description:
+          type: string
+        filename:
+          type: string
+        s3URL:
+          type: string
+    CustomerFiles:
+      type: array
+      items:
+        $ref: '#/components/schemas/CustomerFile'
   securitySchemes:
     publicApiAuthorizer:
       type: http

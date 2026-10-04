@@ -442,21 +442,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    CustomerInputs:
-      type: array
-      items:
-        $ref: '#/components/schemas/CustomerInput'
-    CustomerInput:
-      required:
-      - customerID
-      - id
-      properties:
-        customerID:
-          type: string
-        id:
-          type: string
-        category:
-          type: string
     Dashboard:
       required:
       - owner
@@ -515,6 +500,21 @@ components:
         dataField9:
           type: string
           description: Data for Dashboard Rollback Version 9
+    CustomerInput:
+      required:
+      - customerID
+      - id
+      properties:
+        customerID:
+          type: string
+        id:
+          type: string
+        category:
+          type: string
+    CustomerInputs:
+      type: array
+      items:
+        $ref: '#/components/schemas/CustomerInput'
     Dashboards:
       type: array
       items:
