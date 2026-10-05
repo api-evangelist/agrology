@@ -1,0 +1,12 @@
+{
+ "url": "https://raw.githubusercontent.com/agrology/public-api-docs/HEAD/openapi.yml",
+ "requested_url": "https://raw.githubusercontent.com/agrology/public-api-docs/HEAD/openapi.yml",
+ "status": 200,
+ "content_type": "text/plain; charset=utf-8",
+ "bytes": 71131,
+ "sha256": "fe14669f44a9e726be1f85249273d3bce8bbc2bc8f47153a6d756bf19e3e57fa",
+ "fetched_at": "2026-10-04",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "equivalent",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the provider's current document describes the same operations (Jaccard 1.0), but the bytes differ, so the archive is an earlier or reformatted copy."
+}
