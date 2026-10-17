@@ -232,30 +232,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    ReportDefinition:
-      required:
-      - customerID
-      - id
-      properties:
-        id:
-          type: string
-        customerID:
-          type: string
-        aggregate:
-          type: string
-        entryType:
-          type: string
-        eventBridgeArn:
-          type: string
-        offsetSecs:
-          type: integer
-          format: int64
-        scope:
-          type: string
-        targetID:
-          type: string
-        templateID:
-          type: string
     ReportRuns:
       type: array
       items:
@@ -283,6 +259,30 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/ReportDefinition'
+    ReportDefinition:
+      required:
+      - customerID
+      - id
+      properties:
+        id:
+          type: string
+        customerID:
+          type: string
+        aggregate:
+          type: string
+        entryType:
+          type: string
+        eventBridgeArn:
+          type: string
+        offsetSecs:
+          type: integer
+          format: int64
+        scope:
+          type: string
+        targetID:
+          type: string
+        templateID:
+          type: string
   securitySchemes:
     publicApiAuthorizer:
       type: http
