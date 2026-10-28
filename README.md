@@ -64,54 +64,135 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Agrology is a Delaware Public Benefit Corporation building a predictive agriculture
-platform for specialty crops, vineyards and regenerative row-crop operations. In-field
-sensor nodes capture ground-truth agronomic telemetry — soil moisture, tension,
-conductivity and temperature, air temperature, humidity, vapor pressure deficit,
-barometric pressure, total VOCs, CO2 and nitrous-oxide flux — and machine-learning models
-turn it into microclimate predictions, synthetic metrics and threshold alerts for frost,
-extreme heat, irrigation and smoke taint.
+Agrology is a Delaware Public Benefit Corporation building a predictive agriculture platform for specialty crops, vineyards and regenerative row-crop operations. Its patented in-field sensor nodes capture ground-truth agronomic telemetry — soil moisture and tension, soil and air temperature, humidity, vapor pressure deficit, barometric pressure, total VOCs, CO2 and nitrous-oxide flux — and feed machine-learning models that produce microclimate predictions, synthetic metrics and threshold alerts for frost, extreme heat, irrigation and smoke taint. The company publishes a first-party Agrology Public API v2 (OpenAPI 3.0.1, 90 operations at https://api.agrology.ag/v2) from its own GitHub organization, covering site and node topology, GeoJSON geometry, historical ground-truth and weather data, microclimate and weather predictions, alerts, reports, dashboards, charts and field experiments.
 
-## The API
+**Areas:** Company · Agriculture · AgTech · Climate · Sensors · IoT · Weather · Soil · Carbon · Predictive Analytics · Geospatial · Time Series
 
-Agrology publishes a first-party **Agrology Public API v2** as OpenAPI 3.0.1 — 66 paths,
-90 operations, 22 component schemas — from its own GitHub organization under Apache-2.0.
+## Agrology on APIs.io
 
-- Base URL: <https://api.agrology.ag/v2>
-- Contract: <https://github.com/agrology/public-api-docs>
-- Auth: bearer JWT (Cognito, one-hour lifetime) or a staff-issued `x-api-key`
+Everything profiled for Agrology is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/agrology/](https://apis.io/providers/agrology/)** — or go straight to one of the APIs or properties below.
 
-The surface covers site and node topology, field geometry as RFC 7946 GeoJSON, historical
-ground-truth sensor telemetry, historical and forecast weather data (Tomorrow.io),
-ML-synthesized microclimate metrics, microclimate predictions, threshold alerts, reports,
-dashboards, charts, customer inputs and field experiments.
+### APIs (15)
 
-## Notable findings from this profile
+- [Agrology Alerts API](https://apis.io/apis/agrology/agrology-alerts-api/) — The Alerts API from Agrology — 1 operation(s) for alerts.
+- [Agrology Charts API](https://apis.io/apis/agrology/agrology-charts-api/) — The Charts API from Agrology — 2 operation(s) for charts.
+- [Agrology Dashboards API](https://apis.io/apis/agrology/agrology-dashboards-api/) — The Dashboards API from Agrology — 10 operation(s) for dashboards.
+- [Agrology Experiments API](https://apis.io/apis/agrology/agrology-experiments-api/) — The Experiments API from Agrology — 14 operation(s) for experiments.
+- [Agrology Feedback API](https://apis.io/apis/agrology/agrology-feedback-api/) — The Feedback API from Agrology — 1 operation(s) for feedback.
+- [Agrology Files API](https://apis.io/apis/agrology/agrology-files-api/) — The Files API from Agrology — 3 operation(s) for files.
+- [Agrology Ground Truth API](https://apis.io/apis/agrology/agrology-ground-truth-api/) — The Ground Truth API from Agrology — 5 operation(s) for ground truth.
+- [Agrology Metrics API](https://apis.io/apis/agrology/agrology-metrics-api/) — The Metrics API from Agrology — 6 operation(s) for metrics.
+- [Agrology Microclimate API](https://apis.io/apis/agrology/agrology-microclimate-api/) — The Microclimate API from Agrology — 4 operation(s) for microclimate.
+- [Agrology Reports API](https://apis.io/apis/agrology/agrology-reports-api/) — The Reports API from Agrology — 5 operation(s) for reports.
+- [Agrology Summary Data API](https://apis.io/apis/agrology/agrology-summary-data-api/) — The Summary Data API from Agrology — 1 operation(s) for summary data.
+- [Agrology Synthetics API](https://apis.io/apis/agrology/agrology-synthetics-api/) — The Synthetics API from Agrology — 2 operation(s) for synthetics.
+- [Agrology Topology API](https://apis.io/apis/agrology/agrology-topology-api/) — The Topology API from Agrology — 5 operation(s) for topology.
+- [Agrology User API](https://apis.io/apis/agrology/agrology-user-api/) — The User API from Agrology — 1 operation(s) for user.
+- [Agrology Weather API](https://apis.io/apis/agrology/agrology-weather-api/) — The Weather API from Agrology — 6 operation(s) for weather.
 
-- **The contract is published openly under Apache-2.0**, which is uncommon and makes the
-  spec forkable and diffable — it is also the only dated record of contract change, since
-  there is no changelog.
-- **Historical data is not immutable.** Agrology publishes a standing policy
-  (<https://agrology.ag/model-updates>) that retraining its models restates values for
-  *past* dates, with no version identifier, no as-of query and no header to detect it by.
-  This is the single most consequential fact for any consumer building a ledger or a
-  carbon claim on this data.
-- **No operation declares a 4xx or 5xx response**, so a generated client has no typed
-  error path. The docs also state a missing credential returns 401; the deployed gateway
-  returns 403.
-- **One of seven delete surfaces is reversible** — dashboards can be undeleted; everything
-  else is permanent, and no retention window is published.
-- **No idempotency mechanism exists** on any of the 31 mutating operations.
-- **GeoJSON (RFC 7946) is the domain standard this API speaks**, and the templated
-  `historicalURL` / `predictionsURL` / `syntheticsURL` links inside the GeoJSON body are
-  its only link-following affordance.
-- Agrology publishes no SDKs, no CLI, no sandbox, no pricing, no status page, no MCP
-  server and no well-known documents on any of its hosts.
+### Published properties
 
-## Links
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-- Website: <https://agrology.ag>
-- Grower's Portal: <https://grower.agrology.ag/>
-- Agrology AI: <https://chat.agrology.ag>
-- GitHub: <https://github.com/agrology>
-- Contact: <https://agrology.ag/contact>
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [agrology-mcp.yml](https://apis.io/servers/agrology/agrology-mcp-yml/)
+
+#### Overlays (1)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Agrology Public Api Overlay](https://apis.io/overlays/agrology/agrology-public-api-overlay/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Agrology Authentication](https://apis.io/security/agrology/agrology-authentication/)
+- [Agrology Domain Security](https://apis.io/security/agrology/agrology-domain-security/)
+
+#### OAuth scopes (1)
+
+The permissions the API asks for.
+
+- [Agrology Scopes](https://apis.io/scopes/agrology/agrology-scopes/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Agrology Plans Pricing](https://apis.io/plans/agrology/agrology-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Agrology Rate Limits](https://apis.io/rate-limits/agrology/agrology-rate-limits/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://agrology.ag)
+- [Documentation](https://github.com/agrology/public-api-docs/blob/main/README.md)
+- [API reference](https://github.com/agrology/public-api-docs/blob/main/openapi.yml)
+- [Support](https://agrology.ag/contact)
+- [Blog](https://agrology.ag/blog)
+- [Terms of service](https://agrology.ag/terms)
+- [Privacy policy](https://agrology.ag/privacy)
+- [GitHub](https://github.com/agrology)
+
+## API Evangelist rating
+
+**Kin Score 26.9** — thin · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 66.1 |
+| Contract quality | 45.1 |
+| Contract governance | 4.5 |
+| Operational transparency | 2.6 |
+| Developer ergonomics | 30.4 |
+| Access clarity | 6.6 |
+
+**Agent readiness 20.9** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | — |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | derived (partial credit) |
+| OpenAPI Examples | documented (partial credit) |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 24.5** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/agrology/](https://apis.io/providers/agrology/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Agrology: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/agrology/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
