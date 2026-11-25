@@ -106,6 +106,12 @@ OpenAPI overlays, including conversational phrasing for each operation.
 
 - [Agrology Public Api Overlay](https://apis.io/overlays/agrology/agrology-public-api-overlay/)
 
+#### Governance rules (1)
+
+Spectral rulesets for the provider's contracts.
+
+- [Agrology API Rules](https://apis.io/rules/agrology/agrology-rules/)
+
 #### Security (2)
 
 Authentication, trust centre, and vulnerability disclosure.
@@ -146,18 +152,18 @@ Links to the company's own pages. This repository publishes no copy of their spe
 
 ## API Evangelist rating
 
-**Kin Score 26.9** — thin · rubric 0.24.0 · scored 2026-10-17
+**Kin Score 30.0** — thin · rubric 0.28.1 · scored 2026-11-21
 
 | Facet | Score |
 |---|---|
 | Discoverability | 66.1 |
-| Contract quality | 45.1 |
-| Contract governance | 4.5 |
-| Operational transparency | 2.6 |
+| Contract quality | 49.8 |
+| Contract governance | 18.2 |
+| Operational transparency | 4.8 |
 | Developer ergonomics | 30.4 |
-| Access clarity | 6.6 |
+| Access clarity | 10.6 |
 
-**Agent readiness 20.9** — agent-aware
+**Agent readiness 21.3** — agent-aware
 
 | Agent-readiness dimension | Result |
 |---|---|
@@ -180,8 +186,14 @@ Links to the company's own pages. This repository publishes no copy of their spe
 | Protected Resource Metadata | — |
 | Dynamic Client Registration | — |
 | Agentic Commerce | — |
+| Pagination Ratio | — |
+| Operation Distinctiveness | distinct |
+| MCP Tool Quality | na |
+| Onboarding Descriptor | — |
+| Dns Aid Index | na |
+| Markdown Negotiation | na |
 
-**Regulatory alignment 24.5** — Horizontal (data, software, accessibility, platform)
+**Regulatory alignment 19.1** — Horizontal (data, software, accessibility, platform)
 
 The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/agrology/](https://apis.io/providers/agrology/).
 
